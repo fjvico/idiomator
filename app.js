@@ -110,6 +110,8 @@ const fallbackLanguageData = {
 
 // Initialize the app
 async function init() {
+    console.log('Initializing app...');
+    
     // Set up event listeners
     targetLanguageSelect.addEventListener('change', handleLanguageChange);
     referenceLanguageSelect.addEventListener('change', handleLanguageChange);
@@ -133,50 +135,66 @@ async function init() {
     referenceLanguageSelect.value = state.referenceLanguage;
     interactionModeSelect.value = state.interactionMode;
     
-    // Try to load external data
+    // Try to load external data with timeout
     try {
+        console.log('Attempting to load external data...');
         await loadAllData();
         state.dataLoaded = true;
+        console.log('External data loaded successfully');
     } catch (error) {
+        console.log('Failed to load external data:', error);
         showError('Using fallback data. External files could not be loaded.');
         useFallbackData();
     }
     
     // Load initial concept
     if (state.dataLoaded) {
+        console.log('Loading first concept...');
         loadNewConcept();
         updateStats();
         updateModeIndicator();
+    } else {
+        console.error('Failed to load any data');
+        showError('Failed to load data. Please check your internet connection and try again.');
     }
 }
 
 // Load all data from external files
 async function loadAllData() {
+    console.log('loadAllData called');
+    
+    // Check if we're running locally or on GitHub
+    const isGitHub = window.location.hostname.includes('github.io');
+    const isLocal = window.location.protocol === 'file:';
+    console.log('Environment:', { isGitHub, isLocal, hostname: window.location.hostname });
+    
+    // Try to load concepts data with timeout
     try {
-        // Load concepts data
-        const conceptsResponse = await fetch('data/concept.json');
+        console.log('Fetching concept.json...');
+        const conceptsResponse = await fetchWithTimeout('data/concept.json', 3000);
+        
         if (!conceptsResponse.ok) {
-            throw new Error('Failed to load concepts');
+            console.warn(`concept.json not found or error: ${conceptsResponse.status}`);
+            throw new Error('concept.json not found');
         }
         
         const conceptsText = await conceptsResponse.text();
+        console.log('concept.json loaded, length:', conceptsText.length);
+        
         let parsedConcepts = [];
         
         try {
             const parsed = JSON.parse(conceptsText);
             if (Array.isArray(parsed)) {
                 parsedConcepts = parsed;
+                console.log('Successfully parsed concept.json as array, length:', parsedConcepts.length);
+            } else {
+                console.warn('concept.json is not an array');
+                throw new Error('concept.json is not an array');
             }
         } catch (e) {
-            // Try to extract first JSON array
-            const firstArrayMatch = conceptsText.match(/\[[\s\S]*?\]/);
-            if (firstArrayMatch) {
-                try {
-                    parsedConcepts = JSON.parse(firstArrayMatch[0]);
-                } catch (parseError) {
-                    // Can't parse, will use fallback
-                }
-            }
+            console.warn('Failed to parse concept.json as JSON:', e);
+            throw e;
         }
         
         // Transform the concepts to match expected structure
@@ -187,91 +205,117 @@ async function loadAllData() {
                     icon: item.emoji || item.icon || '❓'
                 };
             });
+            console.log(`Transformed ${concepts.length} concepts`);
         } else {
-            concepts = fallbackConcepts;
+            console.warn('No concepts found in concept.json');
+            throw new Error('No concepts found');
         }
-        
-        // Load language data for each language
-        const languages = ['en', 'es', 'ka'];
-        const loadPromises = languages.map(async (lang) => {
-            try {
-                const response = await fetch(`languages/${lang}.json`);
-                if (!response.ok) {
-                    return false;
-                }
-                
-                const text = await response.text();
-                let words = [];
-                
-                try {
-                    const parsed = JSON.parse(text);
-                    if (Array.isArray(parsed)) {
-                        words = parsed;
-                    }
-                } catch (e) {
-                    // Try to extract first JSON array
-                    const firstArrayMatch = text.match(/\[[\s\S]*?\]/);
-                    if (firstArrayMatch) {
-                        try {
-                            words = JSON.parse(firstArrayMatch[0]);
-                        } catch (parseError) {
-                            // Try NDJSON
-                            const lines = text.split('\n').filter(line => line.trim() !== '');
-                            words = lines.map(line => {
-                                try {
-                                    return JSON.parse(line);
-                                } catch (lineError) {
-                                    return null;
-                                }
-                            }).filter(item => item !== null);
-                        }
-                    }
-                }
-                
-                if (words.length === 0) {
-                    return false;
-                }
-                
-                languageData[lang] = words;
-                return true;
-            } catch (error) {
-                return false;
-            }
-        });
-        
-        const results = await Promise.all(loadPromises);
-        const successfulLoads = results.filter(result => result === true).length;
-        
-        if (successfulLoads === 0) {
-            throw new Error('Could not load any language data from files');
-        }
-        
-        // Make sure all languages have the same number of words as concepts
-        const targetLength = concepts.length;
-        languages.forEach(lang => {
-            if (languageData[lang] && languageData[lang].length < targetLength) {
-                // Pad with fallback data if needed
-                while (languageData[lang].length < targetLength) {
-                    const fallbackIndex = languageData[lang].length % fallbackLanguageData[lang].length;
-                    languageData[lang].push(fallbackLanguageData[lang][fallbackIndex]);
-                }
-            }
-        });
-        
-        state.dataLoaded = true;
-        state.usingFallbackData = false;
         
     } catch (error) {
-        throw error;
+        console.log('Failed to load concept.json, will use fallback:', error);
+        throw error; // Re-throw to trigger fallback
     }
+    
+    // Load language data for each language
+    const languages = ['en', 'es', 'ka'];
+    const loadPromises = languages.map(async (lang) => {
+        try {
+            console.log(`Fetching ${lang}.json...`);
+            const response = await fetchWithTimeout(`languages/${lang}.json`, 3000);
+            
+            if (!response.ok) {
+                console.warn(`${lang}.json not found: ${response.status}`);
+                return false;
+            }
+            
+            const text = await response.text();
+            console.log(`${lang}.json loaded, length:`, text.length);
+            
+            let words = [];
+            
+            try {
+                const parsed = JSON.parse(text);
+                if (Array.isArray(parsed)) {
+                    words = parsed;
+                    console.log(`${lang}: Successfully parsed as array, ${words.length} items`);
+                } else {
+                    console.warn(`${lang}.json is not an array`);
+                    return false;
+                }
+            } catch (e) {
+                console.warn(`Failed to parse ${lang}.json as JSON:`, e);
+                return false;
+            }
+            
+            if (words.length === 0) {
+                console.warn(`${lang}.json is empty`);
+                return false;
+            }
+            
+            languageData[lang] = words;
+            console.log(`Loaded ${words.length} words for ${lang}`);
+            return true;
+            
+        } catch (error) {
+            console.log(`Error loading ${lang}.json:`, error);
+            return false;
+        }
+    });
+    
+    const results = await Promise.all(loadPromises);
+    const successfulLoads = results.filter(result => result === true).length;
+    
+    console.log(`Successfully loaded ${successfulLoads} out of ${languages.length} language files`);
+    
+    if (successfulLoads === 0) {
+        throw new Error('Could not load any language data from files');
+    }
+    
+    // Make sure all languages have the same number of words as concepts
+    const targetLength = concepts.length;
+    languages.forEach(lang => {
+        if (languageData[lang] && languageData[lang].length < targetLength) {
+            console.log(`Padding ${lang} from ${languageData[lang].length} to ${targetLength} words`);
+            // Pad with fallback data if needed
+            while (languageData[lang].length < targetLength) {
+                const fallbackIndex = languageData[lang].length % fallbackLanguageData[lang].length;
+                languageData[lang].push(fallbackLanguageData[lang][fallbackIndex]);
+            }
+        }
+    });
+    
+    state.dataLoaded = true;
+    state.usingFallbackData = false;
+    console.log('Data loading complete');
 }
 
-// Use fallback data
+// Helper function for fetch with timeout
+function fetchWithTimeout(url, timeout = 5000) {
+    return Promise.race([
+        fetch(url),
+        new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Request timeout')), timeout)
+        )
+    ]);
+}
+
+// Use fallback data immediately (simpler approach)
 function useFallbackData() {
-    concepts = fallbackConcepts;
-    languageData = fallbackLanguageData;
+    console.log('Using fallback data...');
+    concepts = [...fallbackConcepts];
+    languageData = {
+        en: [...fallbackLanguageData.en],
+        es: [...fallbackLanguageData.es],
+        ka: [...fallbackLanguageData.ka]
+    };
     state.dataLoaded = true;
     state.usingFallbackData = true;
+    console.log('Fallback data loaded:', {
+        concepts: concepts.length,
+        en: languageData.en.length,
+        es: languageData.es.length,
+        ka: languageData.ka.length
+    });
 }
 
 // Show error message
@@ -336,7 +380,13 @@ function updateModeIndicator() {
 
 // Load a new concept
 function loadNewConcept() {
-    if (!state.dataLoaded || concepts.length === 0) return;
+    console.log('loadNewConcept called, dataLoaded:', state.dataLoaded, 'concepts length:', concepts.length);
+    
+    if (!state.dataLoaded || concepts.length === 0) {
+        console.error('Cannot load concept: data not loaded or no concepts available');
+        showError('No data available. Please refresh the page.');
+        return;
+    }
     
     // Hide loading indicator and show concept
     loadingIndicator.style.display = 'none';
@@ -363,6 +413,8 @@ function loadNewConcept() {
     state.currentConceptIndex = Math.floor(Math.random() * concepts.length);
     const concept = concepts[state.currentConceptIndex];
     
+    console.log('Selected concept index:', state.currentConceptIndex, 'concept:', concept);
+    
     // Update concept display
     if (concept) {
         conceptIcon.innerHTML = concept.icon || '❓';
@@ -375,6 +427,9 @@ function loadNewConcept() {
     // Get words for current concept
     const targetWord = getWordForLanguage(state.targetLanguage, state.currentConceptIndex);
     const referenceWord = getWordForLanguage(state.referenceLanguage, state.currentConceptIndex);
+    
+    console.log('Target word:', targetWord);
+    console.log('Reference word:', referenceWord);
     
     // Determine display based on interaction mode
     let displayWord, displayPhonetic, answerWordText, answerPhoneticText, currentDirection;
@@ -450,6 +505,7 @@ function loadNewConcept() {
 function getWordForLanguage(language, conceptIndex) {
     // Make sure we have data for this language
     if (!languageData[language] || languageData[language].length === 0) {
+        console.warn(`No data for language: ${language}, using fallback`);
         // Use fallback data
         const fallbackIndex = conceptIndex % fallbackLanguageData[language].length;
         return fallbackLanguageData[language][fallbackIndex];
@@ -457,6 +513,7 @@ function getWordForLanguage(language, conceptIndex) {
     
     // Make sure index is within bounds
     if (conceptIndex >= languageData[language].length) {
+        console.warn(`Index ${conceptIndex} out of bounds for ${language}, wrapping`);
         const wrappedIndex = conceptIndex % languageData[language].length;
         return languageData[language][wrappedIndex];
     }
@@ -464,6 +521,7 @@ function getWordForLanguage(language, conceptIndex) {
     const word = languageData[language][conceptIndex];
     
     if (!word) {
+        console.warn(`No word at index ${conceptIndex} for ${language}, using fallback`);
         const fallbackIndex = conceptIndex % fallbackLanguageData[language].length;
         return fallbackLanguageData[language][fallbackIndex];
     }
@@ -478,4 +536,200 @@ function getWordForLanguage(language, conceptIndex) {
 // Enable/disable interface elements
 function enableInterface(enabled) {
     guessInput.disabled = !enabled;
-    sendBtn.dis
+    sendBtn.disabled = !enabled;
+    tellBtn.disabled = !enabled;
+    nextBtn.disabled = !enabled;
+    if (!enabled) {
+        conjugateBtn.disabled = true;
+    }
+}
+
+// Show the answer with feedback
+function showAnswer(isCorrect, message) {
+    state.answerShown = true;
+    answerHidden.style.display = 'none';
+    answerWord.style.display = 'flex';
+    answerPhonetic.style.display = 'block';
+    
+    if (message) {
+        answerFeedback.textContent = message;
+        answerFeedback.className = isCorrect ? 'answer-feedback correct' : 'answer-feedback incorrect';
+    }
+    
+    state.awaitingNext = true;
+}
+
+// Handle send guess
+function handleSendGuess() {
+    if (state.answerShown || state.awaitingNext || !state.dataLoaded) return;
+    
+    const userGuess = guessInput.value.trim().toLowerCase();
+    
+    // Use the correct conjugation if we're conjugating, otherwise use the regular answer
+    const correctAnswer = state.isConjugating && state.currentCorrectConjugation 
+        ? state.currentCorrectConjugation.toLowerCase()
+        : state.currentCorrectAnswer.toLowerCase();
+    
+    state.totalAnswers++;
+    
+    if (userGuess === correctAnswer) {
+        state.correctAnswers++;
+        showAnswer(true, 'Correct!');
+    } else {
+        showAnswer(false, 'Incorrect.');
+    }
+    
+    updateStats();
+}
+
+// Handle tell answer
+function handleTellAnswer() {
+    if (state.answerShown || state.awaitingNext || !state.dataLoaded) return;
+    
+    state.totalAnswers++;
+    showAnswer(false, 'Answer revealed.');
+    updateStats();
+}
+
+// Handle next
+function handleNext() {
+    if (!state.dataLoaded) return;
+    
+    if (!state.answerShown) {
+        // User pressed Next without seeing the answer first
+        state.correctAnswers++;
+        state.totalAnswers++;
+        showAnswer(true, 'Counted as correct!');
+        updateStats();
+        
+        // Wait before loading next concept or conjugation
+        if (state.isConjugating) {
+            setTimeout(() => {
+                if (state.isConjugating && state.currentVerb) {
+                    setupConjugationPrompt();
+                } else {
+                    loadNewConcept();
+                }
+            }, CONFIG.answerDisplayTime);
+        } else {
+            setTimeout(loadNewConcept, CONFIG.answerDisplayTime);
+        }
+    } else {
+        // Answer was already shown
+        if (state.isConjugating) {
+            setupConjugationPrompt();
+        } else {
+            loadNewConcept();
+        }
+    }
+}
+
+// Update statistics
+function updateStats() {
+    correctCount.textContent = state.correctAnswers;
+    totalCount.textContent = state.totalAnswers;
+    
+    const accuracyPercent = state.totalAnswers > 0 
+        ? Math.round((state.correctAnswers / state.totalAnswers) * 100) 
+        : 0;
+    accuracy.textContent = `${accuracyPercent}%`;
+}
+
+// Toggle conjugation practice
+function toggleConjugation() {
+    if (!state.dataLoaded) return;
+    
+    if (!state.isConjugating) {
+        // Start conjugation
+        state.isConjugating = true;
+        conjugateBtn.textContent = 'Stop Conjugation';
+        conjugateBtn.classList.add('conjugating');
+        
+        // Setup first conjugation prompt
+        setupConjugationPrompt();
+    } else {
+        // Stop conjugation
+        state.isConjugating = false;
+        conjugateBtn.textContent = 'Conjugate Verb';
+        conjugateBtn.classList.remove('conjugating');
+        
+        // Clear conjugation display
+        conjugationDisplay.innerHTML = '';
+        
+        // Load a new regular concept
+        loadNewConcept();
+    }
+}
+
+// Setup conjugation prompt
+function setupConjugationPrompt() {
+    if (!state.currentVerb || !state.currentVerb.forms) return;
+    
+    // Get random tense and person
+    const tenseIndex = Math.floor(Math.random() * state.conjugationTenses.length);
+    const personIndex = Math.floor(Math.random() * state.conjugationPersons.length);
+    
+    state.currentTense = state.conjugationTenses[tenseIndex];
+    state.currentPerson = state.conjugationPersons[personIndex];
+    
+    // Get correct answer
+    if (state.currentPerson === '*' || !state.currentVerb.forms[state.currentTense][state.currentPerson]) {
+        state.currentCorrectConjugation = state.currentVerb.forms[state.currentTense]['*'] || 
+            state.currentVerb.word;
+    } else {
+        state.currentCorrectConjugation = state.currentVerb.forms[state.currentTense][state.currentPerson];
+    }
+    
+    // Update answer display for conjugation (but keep hidden)
+    answerWord.textContent = state.currentCorrectConjugation;
+    answerPhonetic.textContent = '';
+    
+    // Update conjugation display with button-like tags
+    conjugationDisplay.innerHTML = '';
+    
+    const tenseDisplay = state.currentTense === 'present' ? 'Present' : 'Past';
+    const personDisplay = getPersonDisplay(state.currentPerson);
+    
+    // Create tense tag
+    const tenseTag = document.createElement('span');
+    tenseTag.className = 'conjugation-tag';
+    tenseTag.textContent = tenseDisplay;
+    conjugationDisplay.appendChild(tenseTag);
+    
+    // Create person tag
+    const personTag = document.createElement('span');
+    personTag.className = 'conjugation-tag';
+    personTag.textContent = personDisplay;
+    conjugationDisplay.appendChild(personTag);
+    
+    // Reset answer shown state
+    state.answerShown = false;
+    state.awaitingNext = false;
+    
+    // Hide answer and show placeholder
+    answerHidden.style.display = 'flex';
+    answerWord.style.display = 'none';
+    answerPhonetic.style.display = 'none';
+    answerFeedback.textContent = '';
+    answerFeedback.className = 'answer-feedback';
+    
+    // Clear guess input
+    guessInput.value = '';
+}
+
+// Get display text for person
+function getPersonDisplay(personCode) {
+    const personMap = {
+        '1sg': '1st singular',
+        '2sg': '2nd singular',
+        '3sg': '3rd singular',
+        '1pl': '1st plural',
+        '2pl': '2nd plural',
+        '3pl': '3rd plural',
+        '*': 'generic'
+    };
+    return personMap[personCode] || personCode;
+}
+
+// Initialize the app when page loads
+window.addEventListener('DOMContentLoaded', init);
