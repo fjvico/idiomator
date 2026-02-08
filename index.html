@@ -447,6 +447,16 @@
             color: #a0a0c0;
         }
         
+        /* Error Message */
+        .error-message {
+            color: #e63946;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(230, 57, 70, 0.1);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
         /* Responsive */
         @media (max-width: 992px) {
             .concept-display-container {
@@ -551,6 +561,9 @@
             </div>
         </div>
         
+        <!-- Error Display -->
+        <div id="error-display" class="error-message" style="display: none;"></div>
+        
         <!-- Concept Display with Hidden Answer -->
         <div class="concept-display-container">
             <div id="concept-content">
@@ -606,12 +619,17 @@
     <script>
         // Configuration
         const CONFIG = {
-            answerDisplayTime: 1500, // Time in milliseconds to show answer when "Next" is pressed
-            answerCheckTime: 1000    // Time in milliseconds to show feedback after checking answer
+            answerDisplayTime: 1500,
+            answerCheckTime: 1000
         };
 
-        // Language data will be loaded from external files
-        let languageData = {};
+        // Language data
+        let languageData = {
+            en: [],
+            es: [],
+            ka: []
+        };
+        
         let concepts = [];
 
         // App state
@@ -630,7 +648,8 @@
             conjugationPersons: ['1sg', '2sg', '3sg', '1pl', '2pl', '3pl'],
             answerShown: false,
             awaitingNext: false,
-            dataLoaded: false
+            dataLoaded: false,
+            usingFallbackData: false
         };
 
         // DOM Elements
@@ -640,6 +659,7 @@
         const modeIndicator = document.getElementById('mode-indicator');
         const conceptMain = document.getElementById('concept-main');
         const loadingIndicator = document.getElementById('loading-indicator');
+        const errorDisplay = document.getElementById('error-display');
         const conceptIcon = document.getElementById('concept-icon');
         const conceptType = document.getElementById('concept-type');
         const conceptWord = document.getElementById('concept-word');
@@ -658,6 +678,59 @@
         const totalCount = document.getElementById('total-count');
         const accuracy = document.getElementById('accuracy');
 
+        // Fallback data in case external files fail
+        const fallbackConcepts = [
+            { type: 'noun', icon: '🚪' },
+            { type: 'verb', icon: '🏃' },
+            { type: 'adjective', icon: '🔵' },
+            { type: 'adverb', icon: '⚡' },
+            { type: 'noun', icon: '📚' },
+            { type: 'verb', icon: '🗣️' },
+            { type: 'adjective', icon: '🔴' },
+            { type: 'noun', icon: '🍎' },
+            { type: 'verb', icon: '🚶' },
+            { type: 'adjective', icon: '🟢' }
+        ];
+
+        const fallbackLanguageData = {
+            en: [
+                { word: 'door', phonetic: '/dɔːr/' },
+                { word: 'run', phonetic: '/rʌn/', forms: { present: { '1sg': 'run', '2sg': 'run', '3sg': 'runs', '1pl': 'run', '2pl': 'run', '3pl': 'run' }, past: { '1sg': 'ran', '2sg': 'ran', '3sg': 'ran', '1pl': 'ran', '2pl': 'ran', '3pl': 'ran' } } },
+                { word: 'blue', phonetic: '/bluː/' },
+                { word: 'quickly', phonetic: '/ˈkwɪkli/' },
+                { word: 'book', phonetic: '/bʊk/' },
+                { word: 'speak', phonetic: '/spiːk/', forms: { present: { '1sg': 'speak', '2sg': 'speak', '3sg': 'speaks', '1pl': 'speak', '2pl': 'speak', '3pl': 'speak' }, past: { '1sg': 'spoke', '2sg': 'spoke', '3sg': 'spoke', '1pl': 'spoke', '2pl': 'spoke', '3pl': 'spoke' } } },
+                { word: 'red', phonetic: '/red/' },
+                { word: 'apple', phonetic: '/ˈæp.əl/' },
+                { word: 'walk', phonetic: '/wɔːk/', forms: { present: { '1sg': 'walk', '2sg': 'walk', '3sg': 'walks', '1pl': 'walk', '2pl': 'walk', '3pl': 'walk' }, past: { '1sg': 'walked', '2sg': 'walked', '3sg': 'walked', '1pl': 'walked', '2pl': 'walked', '3pl': 'walked' } } },
+                { word: 'green', phonetic: '/ɡriːn/' }
+            ],
+            es: [
+                { word: 'puerta', phonetic: '/ˈpweɾ.ta/' },
+                { word: 'correr', phonetic: '/koˈreɾ/', forms: { present: { '1sg': 'corro', '2sg': 'corres', '3sg': 'corre', '1pl': 'corremos', '2pl': 'corréis', '3pl': 'corren' }, past: { '1sg': 'corrí', '2sg': 'corriste', '3sg': 'corrió', '1pl': 'corrimos', '2pl': 'corristeis', '3pl': 'corrieron' } } },
+                { word: 'azul', phonetic: '/aˈθul/' },
+                { word: 'rápidamente', phonetic: '/ˌrapidaˈmente/' },
+                { word: 'libro', phonetic: '/ˈli.bɾo/' },
+                { word: 'hablar', phonetic: '/aˈblar/', forms: { present: { '1sg': 'hablo', '2sg': 'hablas', '3sg': 'habla', '1pl': 'hablamos', '2pl': 'habláis', '3pl': 'hablan' }, past: { '1sg': 'hablé', '2sg': 'hablaste', '3sg': 'habló', '1pl': 'hablamos', '2pl': 'hablasteis', '3pl': 'hablaron' } } },
+                { word: 'rojo', phonetic: '/ˈro.xo/' },
+                { word: 'manzana', phonetic: '/manˈθana/' },
+                { word: 'caminar', phonetic: '/kamiˈnar/', forms: { present: { '1sg': 'camino', '2sg': 'caminas', '3sg': 'camina', '1pl': 'caminamos', '2pl': 'camináis', '3pl': 'caminan' }, past: { '1sg': 'caminé', '2sg': 'caminaste', '3sg': 'caminó', '1pl': 'caminamos', '2pl': 'caminasteis', '3pl': 'caminaron' } } },
+                { word: 'verde', phonetic: '/ˈbeɾ.ðe/' }
+            ],
+            ka: [
+                { word: 'კარი', phonetic: '/kʼɑɾi/' },
+                { word: 'სირბილი', phonetic: '/sirbili/' },
+                { word: 'ლურჯი', phonetic: '/lurd͡ʒi/' },
+                { word: 'სწრაფად', phonetic: '/stsʼɾɑpʰɑd/' },
+                { word: 'წიგნი', phonetic: '/tsʼiɡni/' },
+                { word: 'ლაპარაკი', phonetic: '/lɑpʼɑɾɑkʼi/' },
+                { word: 'წითელი', phonetic: '/tsʼitʰeli/' },
+                { word: 'ვაშლი', phonetic: '/vɑʃli/' },
+                { word: 'სვლა', phonetic: '/svlɑ/' },
+                { word: 'მწვანე', phonetic: '/mtsʼvɑne/' }
+            ]
+        };
+
         // Initialize the app
         async function init() {
             // Set up event listeners
@@ -674,9 +747,6 @@
             nextBtn.addEventListener('click', handleNext);
             conjugateBtn.addEventListener('click', toggleConjugation);
             
-            // Load language data and concepts
-            await loadAllData();
-            
             // Show loading indicator
             loadingIndicator.style.display = 'flex';
             conceptMain.style.display = 'none';
@@ -686,6 +756,17 @@
             referenceLanguageSelect.value = state.referenceLanguage;
             interactionModeSelect.value = state.interactionMode;
             
+            // Try to load external data
+            try {
+                await loadAllData();
+                state.dataLoaded = true;
+                console.log('External data loaded successfully');
+            } catch (error) {
+                console.error('Failed to load external data, using fallback:', error);
+                showError('Using fallback data. External files could not be loaded.');
+                useFallbackData();
+            }
+            
             // Load initial concept
             if (state.dataLoaded) {
                 loadNewConcept();
@@ -694,7 +775,7 @@
             }
         }
 
-        // Update the loadAllData function in your existing code:
+        // Load all data from external files
         async function loadAllData() {
             try {
                 // Load concepts data
@@ -702,117 +783,123 @@
                 if (!conceptsResponse.ok) {
                     throw new Error(`Failed to load concepts: ${conceptsResponse.status}`);
                 }
-                concepts = await conceptsResponse.json();
-                console.log('Concepts loaded from file:', concepts.length);
                 
-                // Load language data for each language
+                // Try to parse concepts
+                const conceptsText = await conceptsResponse.text();
+                let parsedConcepts;
+                
+                try {
+                    parsedConcepts = JSON.parse(conceptsText);
+                    console.log('Concepts parsed as JSON:', parsedConcepts);
+                } catch (e) {
+                    // If not valid JSON, try other formats
+                    console.log('Concepts file is not JSON, trying other formats...');
+                    
+                    // Try NDJSON (newline-delimited JSON)
+                    const lines = conceptsText.split('\n').filter(line => line.trim() !== '');
+                    parsedConcepts = lines.map(line => {
+                        try {
+                            return JSON.parse(line);
+                        } catch (parseError) {
+                            console.error('Failed to parse line:', line);
+                            return null;
+                        }
+                    }).filter(item => item !== null);
+                    
+                    console.log('Concepts parsed as NDJSON:', parsedConcepts);
+                }
+                
+                if (!parsedConcepts || parsedConcepts.length === 0) {
+                    throw new Error('No valid concepts found in file');
+                }
+                
+                concepts = parsedConcepts;
+                console.log(`Loaded ${concepts.length} concepts`);
+                
+                // Load language data
                 const languages = ['en', 'es', 'ka'];
-                const languagePromises = languages.map(async (lang) => {
+                const loadPromises = languages.map(async (lang) => {
                     try {
-                        const langResponse = await fetch(`languages/${lang}.json`);
-                        if (!langResponse.ok) {
-                            throw new Error(`Failed to load ${lang}.json: ${langResponse.status}`);
+                        const response = await fetch(`languages/${lang}.json`);
+                        if (!response.ok) {
+                            throw new Error(`Failed to load ${lang}.json: ${response.status}`);
                         }
                         
-                        // Read the file as text
-                        const text = await langResponse.text();
-                        
-                        // Try different parsing strategies
+                        const text = await response.text();
                         let words = [];
                         
-                        // Strategy 1: Try parsing as a single JSON array first
+                        // Try to parse as JSON
                         try {
                             const parsed = JSON.parse(text);
                             if (Array.isArray(parsed)) {
                                 words = parsed;
-                                console.log(`Language ${lang} parsed as JSON array:`, words.length, 'words');
+                            } else if (parsed && typeof parsed === 'object') {
+                                // If it's an object with words property
+                                if (parsed.words && Array.isArray(parsed.words)) {
+                                    words = parsed.words;
+                                } else {
+                                    // Convert object to array
+                                    words = Object.values(parsed);
+                                }
                             }
                         } catch (e) {
-                            // Not a JSON array, continue to NDJSON parsing
-                        }
-                        
-                        // Strategy 2: If not a JSON array, try NDJSON parsing
-                        if (words.length === 0) {
-                            // Clean up the text - remove BOM if present, trim whitespace
-                            const cleanText = text.trim().replace(/^\uFEFF/, '');
-                            
-                            if (cleanText) {
-                                // Split by newlines and filter out empty lines
-                                const lines = cleanText.split('\n').filter(line => line.trim() !== '');
-                                
-                                // Parse each line as JSON
-                                words = lines.map((line, index) => {
-                                    try {
-                                        return JSON.parse(line);
-                                    } catch (parseError) {
-                                        console.error(`Error parsing line ${index + 1} in ${lang}.json:`, parseError);
-                                        console.error('Problematic line:', line);
-                                        // Return a placeholder for the problematic line
-                                        return {
-                                            word: `[Error in line ${index + 1}]`,
-                                            phonetic: '/?/'
-                                        };
-                                    }
-                                });
-                                console.log(`Language ${lang} parsed as NDJSON:`, words.length, 'words');
-                            }
-                        }
-                        
-                        // Strategy 3: If still no words, try to parse as a single JSON object (not array)
-                        if (words.length === 0) {
-                            try {
-                                const parsed = JSON.parse(text);
-                                // If it's a single object, wrap it in an array
-                                if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-                                    words = [parsed];
-                                    console.log(`Language ${lang} parsed as single JSON object`);
+                            // Not JSON, try NDJSON
+                            const lines = text.split('\n').filter(line => line.trim() !== '');
+                            words = lines.map(line => {
+                                try {
+                                    return JSON.parse(line);
+                                } catch (parseError) {
+                                    return null;
                                 }
-                            } catch (e) {
-                                // Can't parse at all
-                                console.error(`Cannot parse ${lang}.json as JSON`);
-                            }
+                            }).filter(item => item !== null);
                         }
                         
                         if (words.length === 0) {
-                            throw new Error(`No valid data found in ${lang}.json`);
+                            throw new Error(`No valid data in ${lang}.json`);
                         }
                         
                         languageData[lang] = words;
-                        console.log(`Language ${lang} loaded successfully:`, words.length, 'words');
-                        return lang;
-                        
+                        console.log(`Loaded ${words.length} words for ${lang}`);
+                        return true;
                     } catch (error) {
-                        console.error(`Error loading ${lang}.json:`, error);
-                        // Don't throw here, just return null to continue with other languages
-                        return null;
+                        console.error(`Error loading ${lang}:`, error);
+                        return false;
                     }
                 });
                 
-                // Wait for all language loads to complete
-                const loadedLanguages = (await Promise.all(languagePromises)).filter(lang => lang !== null);
+                const results = await Promise.all(loadPromises);
+                const successfulLoads = results.filter(result => result === true).length;
                 
-                // Check if we have enough data
-                if (concepts.length === 0) {
-                    throw new Error('No concepts loaded');
+                if (successfulLoads === 0) {
+                    throw new Error('Could not load any language data');
                 }
                 
-                if (loadedLanguages.length === 0) {
-                    throw new Error('No language data loaded');
-                }
-                
-                console.log(`Loaded ${loadedLanguages.length} languages from files:`, loadedLanguages);
                 state.dataLoaded = true;
                 state.usingFallbackData = false;
                 
-                // If we have fewer languages than expected, show a warning
-                if (loadedLanguages.length < languages.length) {
-                    console.warn(`Only loaded ${loadedLanguages.length} out of ${languages.length} languages`);
-                }
-                
             } catch (error) {
-                console.error('Error loading external data:', error);
-                throw error; // Re-throw to trigger fallback
+                console.error('Error loading data:', error);
+                throw error;
             }
+        }
+
+        // Use fallback data
+        function useFallbackData() {
+            concepts = fallbackConcepts;
+            languageData = fallbackLanguageData;
+            state.dataLoaded = true;
+            state.usingFallbackData = true;
+        }
+
+        // Show error message
+        function showError(message) {
+            errorDisplay.textContent = message;
+            errorDisplay.style.display = 'block';
+            
+            // Hide error after 5 seconds
+            setTimeout(() => {
+                errorDisplay.style.display = 'none';
+            }, 5000);
         }
 
         // Handle language change
@@ -824,7 +911,6 @@
             
             // Make sure languages are different
             if (state.targetLanguage === state.referenceLanguage) {
-                // Swap them if they're the same
                 if (state.targetLanguage === 'en') {
                     state.referenceLanguage = 'es';
                     referenceLanguageSelect.value = 'es';
@@ -868,7 +954,10 @@
 
         // Load a new concept
         function loadNewConcept() {
-            if (!state.dataLoaded) return;
+            if (!state.dataLoaded || concepts.length === 0) {
+                console.error('No concepts available');
+                return;
+            }
             
             // Hide loading indicator and show concept
             loadingIndicator.style.display = 'none';
@@ -895,27 +984,33 @@
             state.currentConceptIndex = Math.floor(Math.random() * concepts.length);
             const concept = concepts[state.currentConceptIndex];
             
-            // Update concept display
-            // Handle icon properly for Font Awesome or emoji
-            console.log('Concept icon value:', concept.icon);
-            console.log('Concept icon type:', typeof concept.icon);
+            // Debug logging
+            console.log('Current concept:', concept);
+            console.log('Concept index:', state.currentConceptIndex);
             
-            if (concept.icon && concept.icon.startsWith('<i')) {
-                // If the icon is already in HTML format (Font Awesome)
-                conceptIcon.innerHTML = concept.icon;
-            } else if (concept.icon && concept.icon.startsWith('fa-')) {
-                // If it's just the Font Awesome class name
-                conceptIcon.innerHTML = `<i class="fas ${concept.icon}"></i>`;
+            // Update concept display
+            if (concept && concept.icon) {
+                // Handle different icon formats
+                if (concept.icon.startsWith('<i')) {
+                    conceptIcon.innerHTML = concept.icon;
+                } else if (concept.icon.startsWith('fa-')) {
+                    conceptIcon.innerHTML = `<i class="fas ${concept.icon}"></i>`;
+                } else {
+                    conceptIcon.innerHTML = concept.icon;
+                }
             } else {
-                // If it's an emoji or text, use as is
-                conceptIcon.innerHTML = concept.icon || '🚪';
+                conceptIcon.innerHTML = '❓';
             }
             
-            conceptType.textContent = concept.type;
+            conceptType.textContent = concept ? concept.type : 'Unknown';
             
             // Get words for current concept
             const targetWord = getWordForLanguage(state.targetLanguage, state.currentConceptIndex);
             const referenceWord = getWordForLanguage(state.referenceLanguage, state.currentConceptIndex);
+            
+            // Debug logging
+            console.log('Target word:', targetWord);
+            console.log('Reference word:', referenceWord);
             
             // Determine display based on interaction mode
             let displayWord, displayPhonetic, answerWordText, answerPhoneticText, currentDirection;
@@ -957,15 +1052,15 @@
             
             // Update display
             conceptWord.textContent = displayWord;
-            conceptPhonetic.textContent = displayPhonetic;
+            conceptPhonetic.textContent = displayPhonetic || '';
             answerWord.textContent = answerWordText;
-            answerPhonetic.textContent = answerPhoneticText;
+            answerPhonetic.textContent = answerPhoneticText || '';
             
             // Clear guess input
             guessInput.value = '';
             
             // Show/hide conjugate button based on word type
-            if (concept.type === 'verb' && targetWord.forms) {
+            if (concept && concept.type === 'verb' && targetWord.forms) {
                 conjugateBtn.style.display = 'block';
                 conjugateBtn.textContent = 'Conjugate Verb';
                 conjugateBtn.classList.remove('conjugating');
@@ -988,14 +1083,31 @@
 
         // Get word for a specific language and concept index
         function getWordForLanguage(language, conceptIndex) {
-            if (!languageData[language] || !languageData[language][conceptIndex]) {
-                // Return a fallback word if data is missing
+            // Make sure we have data for this language
+            if (!languageData[language]) {
+                console.error(`No data for language: ${language}`);
                 return {
-                    word: `[${language.toUpperCase()} word ${conceptIndex}]`,
+                    word: `[No ${language.toUpperCase()} data]`,
                     phonetic: '/?/'
                 };
             }
-            return languageData[language][conceptIndex];
+            
+            // Check if we have enough words in this language
+            if (conceptIndex >= languageData[language].length) {
+                console.warn(`Concept index ${conceptIndex} out of bounds for ${language} (length: ${languageData[language].length})`);
+                
+                // Use modulo to wrap around if index is too high
+                const wrappedIndex = conceptIndex % languageData[language].length;
+                return languageData[language][wrappedIndex] || {
+                    word: `[${language.toUpperCase()} word ${wrappedIndex}]`,
+                    phonetic: '/?/'
+                };
+            }
+            
+            return languageData[language][conceptIndex] || {
+                word: `[${language.toUpperCase()} word ${conceptIndex}]`,
+                phonetic: '/?/'
+            };
         }
 
         // Enable/disable interface elements
@@ -1062,7 +1174,6 @@
             
             if (!state.answerShown) {
                 // User pressed Next without seeing the answer first
-                // Count as correct and show answer briefly
                 state.correctAnswers++;
                 state.totalAnswers++;
                 showAnswer(true, 'Counted as correct!');
@@ -1070,7 +1181,6 @@
                 
                 // Wait before loading next concept or conjugation
                 if (state.isConjugating) {
-                    // If conjugating, wait and then show new conjugation
                     setTimeout(() => {
                         if (state.isConjugating && state.currentVerb) {
                             setupConjugationPrompt();
@@ -1079,16 +1189,13 @@
                         }
                     }, CONFIG.answerDisplayTime);
                 } else {
-                    // If not conjugating, wait and load new concept
                     setTimeout(loadNewConcept, CONFIG.answerDisplayTime);
                 }
             } else {
                 // Answer was already shown
                 if (state.isConjugating) {
-                    // If conjugating, show new conjugation
                     setupConjugationPrompt();
                 } else {
-                    // If not conjugating, go to next concept
                     loadNewConcept();
                 }
             }
@@ -1144,7 +1251,6 @@
             
             // Get correct answer
             if (state.currentPerson === '*' || !state.currentVerb.forms[state.currentTense][state.currentPerson]) {
-                // Use the generic form if available
                 state.currentCorrectConjugation = state.currentVerb.forms[state.currentTense]['*'] || 
                     state.currentVerb.word;
             } else {
