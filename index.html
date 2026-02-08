@@ -694,40 +694,40 @@
 
         const fallbackLanguageData = {
             en: [
-                { word: 'door', phonetic: '/dɔːr/' },
-                { word: 'run', phonetic: '/rʌn/', forms: { present: { '1sg': 'run', '2sg': 'run', '3sg': 'runs', '1pl': 'run', '2pl': 'run', '3pl': 'run' }, past: { '1sg': 'ran', '2sg': 'ran', '3sg': 'ran', '1pl': 'ran', '2pl': 'ran', '3pl': 'ran' } } },
-                { word: 'blue', phonetic: '/bluː/' },
-                { word: 'quickly', phonetic: '/ˈkwɪkli/' },
-                { word: 'book', phonetic: '/bʊk/' },
-                { word: 'speak', phonetic: '/spiːk/', forms: { present: { '1sg': 'speak', '2sg': 'speak', '3sg': 'speaks', '1pl': 'speak', '2pl': 'speak', '3pl': 'speak' }, past: { '1sg': 'spoke', '2sg': 'spoke', '3sg': 'spoke', '1pl': 'spoke', '2pl': 'spoke', '3pl': 'spoke' } } },
-                { word: 'red', phonetic: '/red/' },
-                { word: 'apple', phonetic: '/ˈæp.əl/' },
-                { word: 'walk', phonetic: '/wɔːk/', forms: { present: { '1sg': 'walk', '2sg': 'walk', '3sg': 'walks', '1pl': 'walk', '2pl': 'walk', '3pl': 'walk' }, past: { '1sg': 'walked', '2sg': 'walked', '3sg': 'walked', '1pl': 'walked', '2pl': 'walked', '3pl': 'walked' } } },
-                { word: 'green', phonetic: '/ɡriːn/' }
+                { word: 'door', phonetic: '/dɔːr/', type: 'noun' },
+                { word: 'run', phonetic: '/rʌn/', type: 'verb', forms: { present: { '1sg': 'run', '2sg': 'run', '3sg': 'runs', '1pl': 'run', '2pl': 'run', '3pl': 'run' }, past: { '1sg': 'ran', '2sg': 'ran', '3sg': 'ran', '1pl': 'ran', '2pl': 'ran', '3pl': 'ran' } } },
+                { word: 'blue', phonetic: '/bluː/', type: 'adjective' },
+                { word: 'quickly', phonetic: '/ˈkwɪkli/', type: 'adverb' },
+                { word: 'book', phonetic: '/bʊk/', type: 'noun' },
+                { word: 'speak', phonetic: '/spiːk/', type: 'verb', forms: { present: { '1sg': 'speak', '2sg': 'speak', '3sg': 'speaks', '1pl': 'speak', '2pl': 'speak', '3pl': 'speak' }, past: { '1sg': 'spoke', '2sg': 'spoke', '3sg': 'spoke', '1pl': 'spoke', '2pl': 'spoke', '3pl': 'spoke' } } },
+                { word: 'red', phonetic: '/red/', type: 'adjective' },
+                { word: 'apple', phonetic: '/ˈæp.əl/', type: 'noun' },
+                { word: 'walk', phonetic: '/wɔːk/', type: 'verb', forms: { present: { '1sg': 'walk', '2sg': 'walk', '3sg': 'walks', '1pl': 'walk', '2pl': 'walk', '3pl': 'walk' }, past: { '1sg': 'walked', '2sg': 'walked', '3sg': 'walked', '1pl': 'walked', '2pl': 'walked', '3pl': 'walked' } } },
+                { word: 'green', phonetic: '/ɡriːn/', type: 'adjective' }
             ],
             es: [
-                { word: 'puerta', phonetic: '/ˈpweɾ.ta/' },
-                { word: 'correr', phonetic: '/koˈreɾ/', forms: { present: { '1sg': 'corro', '2sg': 'corres', '3sg': 'corre', '1pl': 'corremos', '2pl': 'corréis', '3pl': 'corren' }, past: { '1sg': 'corrí', '2sg': 'corriste', '3sg': 'corrió', '1pl': 'corrimos', '2pl': 'corristeis', '3pl': 'corrieron' } } },
-                { word: 'azul', phonetic: '/aˈθul/' },
-                { word: 'rápidamente', phonetic: '/ˌrapidaˈmente/' },
-                { word: 'libro', phonetic: '/ˈli.bɾo/' },
-                { word: 'hablar', phonetic: '/aˈblar/', forms: { present: { '1sg': 'hablo', '2sg': 'hablas', '3sg': 'habla', '1pl': 'hablamos', '2pl': 'habláis', '3pl': 'hablan' }, past: { '1sg': 'hablé', '2sg': 'hablaste', '3sg': 'habló', '1pl': 'hablamos', '2pl': 'hablasteis', '3pl': 'hablaron' } } },
-                { word: 'rojo', phonetic: '/ˈro.xo/' },
-                { word: 'manzana', phonetic: '/manˈθana/' },
-                { word: 'caminar', phonetic: '/kamiˈnar/', forms: { present: { '1sg': 'camino', '2sg': 'caminas', '3sg': 'camina', '1pl': 'caminamos', '2pl': 'camináis', '3pl': 'caminan' }, past: { '1sg': 'caminé', '2sg': 'caminaste', '3sg': 'caminó', '1pl': 'caminamos', '2pl': 'caminasteis', '3pl': 'caminaron' } } },
-                { word: 'verde', phonetic: '/ˈbeɾ.ðe/' }
+                { word: 'puerta', phonetic: '/ˈpweɾ.ta/', type: 'noun' },
+                { word: 'correr', phonetic: '/koˈreɾ/', type: 'verb', forms: { present: { '1sg': 'corro', '2sg': 'corres', '3sg': 'corre', '1pl': 'corremos', '2pl': 'corréis', '3pl': 'corren' }, past: { '1sg': 'corrí', '2sg': 'corriste', '3sg': 'corrió', '1pl': 'corrimos', '2pl': 'corristeis', '3pl': 'corrieron' } } },
+                { word: 'azul', phonetic: '/aˈθul/', type: 'adjective' },
+                { word: 'rápidamente', phonetic: '/ˌrapidaˈmente/', type: 'adverb' },
+                { word: 'libro', phonetic: '/ˈli.bɾo/', type: 'noun' },
+                { word: 'hablar', phonetic: '/aˈblar/', type: 'verb', forms: { present: { '1sg': 'hablo', '2sg': 'hablas', '3sg': 'habla', '1pl': 'hablamos', '2pl': 'habláis', '3pl': 'hablan' }, past: { '1sg': 'hablé', '2sg': 'hablaste', '3sg': 'habló', '1pl': 'hablamos', '2pl': 'hablasteis', '3pl': 'hablaron' } } },
+                { word: 'rojo', phonetic: '/ˈro.xo/', type: 'adjective' },
+                { word: 'manzana', phonetic: '/manˈθana/', type: 'noun' },
+                { word: 'caminar', phonetic: '/kamiˈnar/', type: 'verb', forms: { present: { '1sg': 'camino', '2sg': 'caminas', '3sg': 'camina', '1pl': 'caminamos', '2pl': 'camináis', '3pl': 'caminan' }, past: { '1sg': 'caminé', '2sg': 'caminaste', '3sg': 'caminó', '1pl': 'caminamos', '2pl': 'caminasteis', '3pl': 'caminaron' } } },
+                { word: 'verde', phonetic: '/ˈbeɾ.ðe/', type: 'adjective' }
             ],
             ka: [
-                { word: 'კარი', phonetic: '/kʼɑɾi/' },
-                { word: 'სირბილი', phonetic: '/sirbili/' },
-                { word: 'ლურჯი', phonetic: '/lurd͡ʒi/' },
-                { word: 'სწრაფად', phonetic: '/stsʼɾɑpʰɑd/' },
-                { word: 'წიგნი', phonetic: '/tsʼiɡni/' },
-                { word: 'ლაპარაკი', phonetic: '/lɑpʼɑɾɑkʼi/' },
-                { word: 'წითელი', phonetic: '/tsʼitʰeli/' },
-                { word: 'ვაშლი', phonetic: '/vɑʃli/' },
-                { word: 'სვლა', phonetic: '/svlɑ/' },
-                { word: 'მწვანე', phonetic: '/mtsʼvɑne/' }
+                { word: 'კარი', phonetic: '/kʼɑɾi/', type: 'noun' },
+                { word: 'სირბილი', phonetic: '/sirbili/', type: 'verb' },
+                { word: 'ლურჯი', phonetic: '/lurd͡ʒi/', type: 'adjective' },
+                { word: 'სწრაფად', phonetic: '/stsʼɾɑpʰɑd/', type: 'adverb' },
+                { word: 'წიგნი', phonetic: '/tsʼiɡni/', type: 'noun' },
+                { word: 'ლაპარაკი', phonetic: '/lɑpʼɑɾɑkʼi/', type: 'verb' },
+                { word: 'წითელი', phonetic: '/tsʼitʰeli/', type: 'adjective' },
+                { word: 'ვაშლი', phonetic: '/vɑʃli/', type: 'noun' },
+                { word: 'სვლა', phonetic: '/svlɑ/', type: 'verb' },
+                { word: 'მწვანე', phonetic: '/mtsʼvɑne/', type: 'adjective' }
             ]
         };
 
@@ -778,24 +778,121 @@
         // Load all data from external files
         async function loadAllData() {
             try {
-                // Load concepts data
+                // Load concepts data - try multiple possible formats
+                console.log('Loading concept.json...');
                 const conceptsResponse = await fetch('data/concept.json');
                 if (!conceptsResponse.ok) {
                     throw new Error(`Failed to load concepts: ${conceptsResponse.status}`);
                 }
                 
-                // Try to parse concepts
                 const conceptsText = await conceptsResponse.text();
+                console.log('Raw concepts text (first 500 chars):', conceptsText.substring(0, 500));
+                
                 let parsedConcepts;
                 
                 try {
+                    // First try to parse as regular JSON
                     parsedConcepts = JSON.parse(conceptsText);
-                    console.log('Concepts parsed as JSON:', parsedConcepts);
-                } catch (e) {
-                    // If not valid JSON, try other formats
-                    console.log('Concepts file is not JSON, trying other formats...');
+                    console.log('Successfully parsed as JSON');
                     
-                    // Try NDJSON (newline-delimited JSON)
+                    // Handle different possible structures
+                    if (Array.isArray(parsedConcepts)) {
+                        // It's an array
+                        if (parsedConcepts.length > 0) {
+                            // Check the structure of first item
+                            const firstItem = parsedConcepts[0];
+                            console.log('First concept item structure:', firstItem);
+                            
+                            // If it's just strings or simple objects, we need to transform them
+                            if (typeof firstItem === 'string') {
+                                // Array of strings
+                                concepts = parsedConcepts.map((word, index) => {
+                                    // Try to determine type from word or position
+                                    const types = ['noun', 'verb', 'adjective', 'adverb', 'noun'];
+                                    const icons = ['🚪', '🏃', '🔵', '⚡', '📚'];
+                                    const typeIndex = index % types.length;
+                                    const iconIndex = index % icons.length;
+                                    
+                                    return {
+                                        type: types[typeIndex],
+                                        icon: icons[iconIndex]
+                                    };
+                                });
+                                console.log('Transformed string array to concept objects');
+                            } else if (firstItem.word || firstItem.text) {
+                                // Array of word objects - extract type if available
+                                concepts = parsedConcepts.map((item, index) => {
+                                    const types = ['noun', 'verb', 'adjective', 'adverb', 'noun'];
+                                    const icons = ['🚪', '🏃', '🔵', '⚡', '📚'];
+                                    const typeIndex = index % types.length;
+                                    const iconIndex = index % icons.length;
+                                    
+                                    return {
+                                        type: item.type || item.pos || types[typeIndex],
+                                        icon: item.icon || icons[iconIndex]
+                                    };
+                                });
+                                console.log('Transformed word objects to concept objects');
+                            } else if (firstItem.type || firstItem.icon) {
+                                // Already has the right structure
+                                concepts = parsedConcepts;
+                                console.log('Concepts already have correct structure');
+                            } else {
+                                // Unknown structure, create default
+                                concepts = parsedConcepts.map((item, index) => {
+                                    const types = ['noun', 'verb', 'adjective', 'adverb', 'noun'];
+                                    const icons = ['🚪', '🏃', '🔵', '⚡', '📚'];
+                                    const typeIndex = index % types.length;
+                                    const iconIndex = index % icons.length;
+                                    
+                                    return {
+                                        type: types[typeIndex],
+                                        icon: icons[iconIndex],
+                                        original: item // Keep original for debugging
+                                    };
+                                });
+                                console.log('Created default structure for unknown format');
+                            }
+                        }
+                    } else if (parsedConcepts && typeof parsedConcepts === 'object') {
+                        // It's an object, not an array
+                        if (parsedConcepts.concepts && Array.isArray(parsedConcepts.concepts)) {
+                            // Object with 'concepts' property
+                            concepts = parsedConcepts.concepts;
+                            console.log('Extracted concepts from object.concepts');
+                        } else if (parsedConcepts.words && Array.isArray(parsedConcepts.words)) {
+                            // Object with 'words' property
+                            concepts = parsedConcepts.words.map((item, index) => {
+                                const types = ['noun', 'verb', 'adjective', 'adverb', 'noun'];
+                                const icons = ['🚪', '🏃', '🔵', '⚡', '📚'];
+                                const typeIndex = index % types.length;
+                                const iconIndex = index % icons.length;
+                                
+                                return {
+                                    type: item.type || item.pos || types[typeIndex],
+                                    icon: item.icon || icons[iconIndex]
+                                };
+                            });
+                            console.log('Transformed words to concepts');
+                        } else {
+                            // Convert object values to array
+                            concepts = Object.values(parsedConcepts).map((item, index) => {
+                                const types = ['noun', 'verb', 'adjective', 'adverb', 'noun'];
+                                const icons = ['🚪', '🏃', '🔵', '⚡', '📚'];
+                                const typeIndex = index % types.length;
+                                const iconIndex = index % icons.length;
+                                
+                                return {
+                                    type: (item && item.type) || (item && item.pos) || types[typeIndex],
+                                    icon: (item && item.icon) || icons[iconIndex]
+                                };
+                            });
+                            console.log('Converted object values to concepts array');
+                        }
+                    }
+                } catch (e) {
+                    console.error('Failed to parse concepts as JSON:', e);
+                    // Try NDJSON format
                     const lines = conceptsText.split('\n').filter(line => line.trim() !== '');
                     parsedConcepts = lines.map(line => {
                         try {
@@ -806,15 +903,28 @@
                         }
                     }).filter(item => item !== null);
                     
-                    console.log('Concepts parsed as NDJSON:', parsedConcepts);
+                    if (parsedConcepts.length > 0) {
+                        concepts = parsedConcepts.map((item, index) => {
+                            const types = ['noun', 'verb', 'adjective', 'adverb', 'noun'];
+                            const icons = ['🚪', '🏃', '🔵', '⚡', '📚'];
+                            const typeIndex = index % types.length;
+                            const iconIndex = index % icons.length;
+                            
+                            return {
+                                type: item.type || item.pos || types[typeIndex],
+                                icon: item.icon || icons[iconIndex]
+                            };
+                        });
+                        console.log('Parsed concepts as NDJSON');
+                    }
                 }
                 
-                if (!parsedConcepts || parsedConcepts.length === 0) {
-                    throw new Error('No valid concepts found in file');
+                if (!concepts || concepts.length === 0) {
+                    console.warn('No concepts found or created, using fallback');
+                    concepts = fallbackConcepts;
                 }
                 
-                concepts = parsedConcepts;
-                console.log(`Loaded ${concepts.length} concepts`);
+                console.log(`Loaded/created ${concepts.length} concepts`);
                 
                 // Load language data
                 const languages = ['en', 'es', 'ka'];
@@ -826,32 +936,43 @@
                         }
                         
                         const text = await response.text();
+                        console.log(`Loaded ${lang}.json, length: ${text.length} chars`);
+                        
                         let words = [];
                         
-                        // Try to parse as JSON
                         try {
                             const parsed = JSON.parse(text);
+                            
                             if (Array.isArray(parsed)) {
                                 words = parsed;
+                                console.log(`${lang}: Parsed as array with ${words.length} items`);
                             } else if (parsed && typeof parsed === 'object') {
-                                // If it's an object with words property
+                                // Handle object format
                                 if (parsed.words && Array.isArray(parsed.words)) {
                                     words = parsed.words;
+                                    console.log(`${lang}: Extracted words from object.words`);
+                                } else if (parsed.concepts && Array.isArray(parsed.concepts)) {
+                                    words = parsed.concepts;
+                                    console.log(`${lang}: Extracted words from object.concepts`);
                                 } else {
                                     // Convert object to array
                                     words = Object.values(parsed);
+                                    console.log(`${lang}: Converted object values to array`);
                                 }
                             }
                         } catch (e) {
-                            // Not JSON, try NDJSON
+                            console.error(`${lang}: Failed to parse as JSON, trying NDJSON:`, e);
+                            // Try NDJSON
                             const lines = text.split('\n').filter(line => line.trim() !== '');
                             words = lines.map(line => {
                                 try {
                                     return JSON.parse(line);
                                 } catch (parseError) {
+                                    console.error(`${lang}: Failed to parse line:`, line);
                                     return null;
                                 }
                             }).filter(item => item !== null);
+                            console.log(`${lang}: Parsed as NDJSON with ${words.length} items`);
                         }
                         
                         if (words.length === 0) {
@@ -988,21 +1109,48 @@
             console.log('Current concept:', concept);
             console.log('Concept index:', state.currentConceptIndex);
             
-            // Update concept display
-            if (concept && concept.icon) {
-                // Handle different icon formats
-                if (concept.icon.startsWith('<i')) {
-                    conceptIcon.innerHTML = concept.icon;
-                } else if (concept.icon.startsWith('fa-')) {
-                    conceptIcon.innerHTML = `<i class="fas ${concept.icon}"></i>`;
+            // Update concept display with better error handling
+            if (concept) {
+                // Handle icon
+                if (concept.icon) {
+                    if (concept.icon.startsWith('<i')) {
+                        conceptIcon.innerHTML = concept.icon;
+                    } else if (concept.icon.startsWith('fa-')) {
+                        conceptIcon.innerHTML = `<i class="fas ${concept.icon}"></i>`;
+                    } else {
+                        conceptIcon.innerHTML = concept.icon;
+                    }
                 } else {
-                    conceptIcon.innerHTML = concept.icon;
+                    // No icon, use default based on type
+                    const iconMap = {
+                        'noun': '📦',
+                        'verb': '🏃',
+                        'adjective': '🔵',
+                        'adverb': '⚡',
+                        'default': '❓'
+                    };
+                    const icon = iconMap[concept.type?.toLowerCase()] || iconMap.default;
+                    conceptIcon.innerHTML = icon;
+                }
+                
+                // Handle type
+                if (concept.type) {
+                    conceptType.textContent = concept.type;
+                } else {
+                    // Try to guess type from other properties
+                    if (concept.pos) {
+                        conceptType.textContent = concept.pos;
+                    } else if (concept.category) {
+                        conceptType.textContent = concept.category;
+                    } else {
+                        conceptType.textContent = 'Unknown';
+                    }
                 }
             } else {
+                // Concept is undefined or null
                 conceptIcon.innerHTML = '❓';
+                conceptType.textContent = 'Unknown';
             }
-            
-            conceptType.textContent = concept ? concept.type : 'Unknown';
             
             // Get words for current concept
             const targetWord = getWordForLanguage(state.targetLanguage, state.currentConceptIndex);
@@ -1059,8 +1207,11 @@
             // Clear guess input
             guessInput.value = '';
             
+            // Get word type for conjugation button - check both concept and word object
+            const wordType = concept?.type || targetWord.type || 'noun';
+            
             // Show/hide conjugate button based on word type
-            if (concept && concept.type === 'verb' && targetWord.forms) {
+            if (wordType.toLowerCase() === 'verb' && targetWord.forms) {
                 conjugateBtn.style.display = 'block';
                 conjugateBtn.textContent = 'Conjugate Verb';
                 conjugateBtn.classList.remove('conjugating');
@@ -1088,7 +1239,8 @@
                 console.error(`No data for language: ${language}`);
                 return {
                     word: `[No ${language.toUpperCase()} data]`,
-                    phonetic: '/?/'
+                    phonetic: '/?/',
+                    type: 'unknown'
                 };
             }
             
@@ -1098,15 +1250,41 @@
                 
                 // Use modulo to wrap around if index is too high
                 const wrappedIndex = conceptIndex % languageData[language].length;
-                return languageData[language][wrappedIndex] || {
-                    word: `[${language.toUpperCase()} word ${wrappedIndex}]`,
-                    phonetic: '/?/'
+                const word = languageData[language][wrappedIndex];
+                
+                if (word) {
+                    // Ensure word has required properties
+                    return {
+                        word: word.word || word.text || `[${language.toUpperCase()} word ${wrappedIndex}]`,
+                        phonetic: word.phonetic || word.pronunciation || '/?/',
+                        type: word.type || word.pos || 'noun',
+                        forms: word.forms
+                    };
+                } else {
+                    return {
+                        word: `[${language.toUpperCase()} word ${wrappedIndex}]`,
+                        phonetic: '/?/',
+                        type: 'noun'
+                    };
+                }
+            }
+            
+            const word = languageData[language][conceptIndex];
+            
+            if (!word) {
+                return {
+                    word: `[${language.toUpperCase()} word ${conceptIndex}]`,
+                    phonetic: '/?/',
+                    type: 'noun'
                 };
             }
             
-            return languageData[language][conceptIndex] || {
-                word: `[${language.toUpperCase()} word ${conceptIndex}]`,
-                phonetic: '/?/'
+            // Ensure word has required properties
+            return {
+                word: word.word || word.text || `[${language.toUpperCase()} word ${conceptIndex}]`,
+                phonetic: word.phonetic || word.pronunciation || '/?/',
+                type: word.type || word.pos || 'noun',
+                forms: word.forms
             };
         }
 
