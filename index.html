@@ -158,6 +158,8 @@
             align-items: center;
             justify-content: center;
             min-height: 290px;
+            width: 100%;
+            text-align: center;
         }
         
         .answer-sidebar {
@@ -175,6 +177,10 @@
             font-size: 80px;
             margin-bottom: 20px;
             filter: drop-shadow(0 0 8px rgba(76, 201, 240, 0.5));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
         }
         
         .concept-type {
@@ -197,6 +203,8 @@
             min-height: 60px;
             display: flex;
             align-items: center;
+            justify-content: center;
+            width: 100%;
         }
         
         .concept-phonetic {
@@ -204,6 +212,8 @@
             color: #a0a0c0;
             margin-bottom: 10px;
             font-style: italic;
+            text-align: center;
+            width: 100%;
         }
         
         .conjugation-display {
@@ -214,6 +224,7 @@
             align-items: center;
             justify-content: center;
             flex-wrap: wrap;
+            width: 100%;
         }
         
         .conjugation-tag {
@@ -398,6 +409,7 @@
             min-height: 300px;
             color: #4cc9f0;
             font-size: 18px;
+            width: 100%;
         }
         
         .loading-spinner {
@@ -884,7 +896,21 @@
             const concept = concepts[state.currentConceptIndex];
             
             // Update concept display
-            conceptIcon.textContent = concept.icon;
+            // Handle icon properly for Font Awesome or emoji
+            console.log('Concept icon value:', concept.icon);
+            console.log('Concept icon type:', typeof concept.icon);
+            
+            if (concept.icon && concept.icon.startsWith('<i')) {
+                // If the icon is already in HTML format (Font Awesome)
+                conceptIcon.innerHTML = concept.icon;
+            } else if (concept.icon && concept.icon.startsWith('fa-')) {
+                // If it's just the Font Awesome class name
+                conceptIcon.innerHTML = `<i class="fas ${concept.icon}"></i>`;
+            } else {
+                // If it's an emoji or text, use as is
+                conceptIcon.innerHTML = concept.icon || '🚪';
+            }
+            
             conceptType.textContent = concept.type;
             
             // Get words for current concept
