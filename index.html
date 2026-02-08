@@ -682,7 +682,7 @@
             }
         }
 
-        // Load all data files
+        // Update the loadAllData function in your existing code:
         async function loadAllData() {
             try {
                 // Load concepts data
@@ -691,53 +691,115 @@
                     throw new Error(`Failed to load concepts: ${conceptsResponse.status}`);
                 }
                 concepts = await conceptsResponse.json();
-                console.log('Concepts loaded:', concepts.length);
+                console.log('Concepts loaded from file:', concepts.length);
                 
                 // Load language data for each language
                 const languages = ['en', 'es', 'ka'];
-                for (const lang of languages) {
+                const languagePromises = languages.map(async (lang) => {
                     try {
                         const langResponse = await fetch(`languages/${lang}.json`);
                         if (!langResponse.ok) {
-                            console.warn(`Failed to load ${lang}.json: ${langResponse.status}`);
-                            continue;
+                            throw new Error(`Failed to load ${lang}.json: ${langResponse.status}`);
                         }
                         
-                        // Read the file as text and parse line by line (since it's NDJSON format)
+                        // Read the file as text
                         const text = await langResponse.text();
-                        const lines = text.trim().split('\n');
-                        const words = lines.map(line => JSON.parse(line));
+                        
+                        // Try different parsing strategies
+                        let words = [];
+                        
+                        // Strategy 1: Try parsing as a single JSON array first
+                        try {
+                            const parsed = JSON.parse(text);
+                            if (Array.isArray(parsed)) {
+                                words = parsed;
+                                console.log(`Language ${lang} parsed as JSON array:`, words.length, 'words');
+                            }
+                        } catch (e) {
+                            // Not a JSON array, continue to NDJSON parsing
+                        }
+                        
+                        // Strategy 2: If not a JSON array, try NDJSON parsing
+                        if (words.length === 0) {
+                            // Clean up the text - remove BOM if present, trim whitespace
+                            const cleanText = text.trim().replace(/^\uFEFF/, '');
+                            
+                            if (cleanText) {
+                                // Split by newlines and filter out empty lines
+                                const lines = cleanText.split('\n').filter(line => line.trim() !== '');
+                                
+                                // Parse each line as JSON
+                                words = lines.map((line, index) => {
+                                    try {
+                                        return JSON.parse(line);
+                                    } catch (parseError) {
+                                        console.error(`Error parsing line ${index + 1} in ${lang}.json:`, parseError);
+                                        console.error('Problematic line:', line);
+                                        // Return a placeholder for the problematic line
+                                        return {
+                                            word: `[Error in line ${index + 1}]`,
+                                            phonetic: '/?/'
+                                        };
+                                    }
+                                });
+                                console.log(`Language ${lang} parsed as NDJSON:`, words.length, 'words');
+                            }
+                        }
+                        
+                        // Strategy 3: If still no words, try to parse as a single JSON object (not array)
+                        if (words.length === 0) {
+                            try {
+                                const parsed = JSON.parse(text);
+                                // If it's a single object, wrap it in an array
+                                if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+                                    words = [parsed];
+                                    console.log(`Language ${lang} parsed as single JSON object`);
+                                }
+                            } catch (e) {
+                                // Can't parse at all
+                                console.error(`Cannot parse ${lang}.json as JSON`);
+                            }
+                        }
+                        
+                        if (words.length === 0) {
+                            throw new Error(`No valid data found in ${lang}.json`);
+                        }
                         
                         languageData[lang] = words;
-                        console.log(`Language ${lang} loaded:`, words.length, 'words');
+                        console.log(`Language ${lang} loaded successfully:`, words.length, 'words');
+                        return lang;
+                        
                     } catch (error) {
                         console.error(`Error loading ${lang}.json:`, error);
+                        // Don't throw here, just return null to continue with other languages
+                        return null;
                     }
-                }
+                });
+                
+                // Wait for all language loads to complete
+                const loadedLanguages = (await Promise.all(languagePromises)).filter(lang => lang !== null);
                 
                 // Check if we have enough data
                 if (concepts.length === 0) {
                     throw new Error('No concepts loaded');
                 }
                 
-                const loadedLanguages = Object.keys(languageData);
                 if (loadedLanguages.length === 0) {
                     throw new Error('No language data loaded');
                 }
                 
-                console.log(`Loaded ${loadedLanguages.length} languages:`, loadedLanguages);
+                console.log(`Loaded ${loadedLanguages.length} languages from files:`, loadedLanguages);
                 state.dataLoaded = true;
+                state.usingFallbackData = false;
+                
+                // If we have fewer languages than expected, show a warning
+                if (loadedLanguages.length < languages.length) {
+                    console.warn(`Only loaded ${loadedLanguages.length} out of ${languages.length} languages`);
+                }
                 
             } catch (error) {
-                console.error('Error loading data:', error);
-                loadingIndicator.innerHTML = `
-                    <div style="color: #e63946; text-align: center;">
-                        <i class="fas fa-exclamation-triangle" style="font-size: 40px; margin-bottom: 15px;"></i>
-                        <div>Failed to load data</div>
-                        <div style="font-size: 14px; margin-top: 10px;">${error.message}</div>
-                        <div style="font-size: 12px; margin-top: 5px;">Check browser console for details</div>
-                    </div>
-                `;
+                console.error('Error loading external data:', error);
+                throw error; // Re-throw to trigger fallback
             }
         }
 
