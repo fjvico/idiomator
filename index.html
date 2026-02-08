@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDIOMATOR - Language Learning</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e6e6e6;
+            min-height: 100vh;
+            padding: 10px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #0f3460;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 28px;
+            background: linear-gradient(90deg, #4cc9f0, #4361ee);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+        
+        .logo-icon {
+            font-size: 32px;
+            color: #4cc9f0;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 15px;
+            font-size: 18px;
+        }
+        
+        .stat-box {
+            background-color: rgba(15, 52, 96, 0.7);
+            padding: 8px 15px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 100px;
+        }
+        
+        .stat-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #4cc9f0;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #a0a0c0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Controls */
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            background-color: rgba(15, 52, 96, 0.3);
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .control-label {
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: #a0a0c0;
+            font-weight: 500;
+        }
+        
+        select {
+            padding: 12px 15px;
+            background-color: rgba(30, 30, 60, 0.8);
+            border: 1px solid #0f3460;
+            border-radius: 8px;
+            color: #e6e6e6;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234cc9f0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+        
+        select:hover {
+            border-color: #4cc9f0;
+            background-color: rgba(30, 30, 80, 0.9);
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #4cc9f0;
+            box-shadow: 0 0 0 2px rgba(76, 201, 240, 0.2);
+        }
+        
+        /* Concept Display */
+        .concept-display-container {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 25px;
+            background-color: rgba(15, 52, 96, 0.3);
+            padding: 30px 20px;
+            border-radius: 12px;
+            min-height: 350px;
+            align-items: center;
+        }
+        
+        .concept-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 290px;
+        }
+        
+        .answer-sidebar {
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-left: 2px solid rgba(15, 52, 96, 0.7);
+            padding-left: 30px;
+            min-height: 290px;
+        }
+        
+        .concept-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 8px rgba(76, 201, 240, 0.5));
+        }
+        
+        .concept-type {
+            display: inline-block;
+            padding: 6px 15px;
+            background-color: rgba(67, 97, 238, 0.3);
+            border-radius: 20px;
+            font-size: 14px;
+            color: #a0a0c0;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .concept-word {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-align: center;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .concept-phonetic {
+            font-size: 24px;
+            color: #a0a0c0;
+            margin-bottom: 10px;
+            font-style: italic;
+        }
+        
+        .conjugation-display {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            min-height: 40px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .conjugation-tag {
+            display: inline-block;
+            padding: 6px 15px;
+            background-color: rgba(114, 9, 183, 0.3);
+            border: 1px solid #7209b7;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #e6e6e6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+        
+        .answer-label {
+            font-size: 16px;
+            color: #a0a0c0;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .answer-hidden {
+            font-size: 20px;
+            color: #a0a0c0;
+            font-style: italic;
+            margin-bottom: 20px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 50px;
+        }
+        
+        .answer-word {
+            font-size: 36px;
+            color: #4cc9f0;
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            display: none; /* Hidden by default */
+        }
+        
+        .answer-phonetic {
+            font-size: 20px;
+            color: #a0a0c0;
+            font-style: italic;
+            margin-bottom: 15px;
+            display: none; /* Hidden by default */
+        }
+        
+        .answer-feedback {
+            font-size: 18px;
+            text-align: center;
+            min-height: 30px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .answer-feedback.correct {
+            color: #2a9d8f;
+        }
+        
+        .answer-feedback.incorrect {
+            color: #e63946;
+        }
+        
+        /* Action Section */
+        .action-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .guess-section {
+            display: flex;
+            gap: 10px;
+            grid-column: span 2;
+        }
+        
+        .guess-input {
+            flex: 1;
+            padding: 15px;
+            background-color: rgba(30, 30, 60, 0.8);
+            border: 2px solid #0f3460;
+            border-radius: 8px;
+            color: #e6e6e6;
+            font-size: 18px;
+        }
+        
+        .guess-input:focus {
+            outline: none;
+            border-color: #4cc9f0;
+        }
+        
+        .send-btn {
+            background-color: #4361ee;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0 25px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .send-btn:hover {
+            background-color: #5a75f0;
+        }
+        
+        .action-btn {
+            padding: 18px 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .tell-btn {
+            background-color: #e63946;
+            color: white;
+        }
+        
+        .tell-btn:hover {
+            background-color: #f5606d;
+            transform: translateY(-3px);
+        }
+        
+        .next-btn {
+            background-color: #2a9d8f;
+            color: white;
+        }
+        
+        .next-btn:hover {
+            background-color: #3dbdaa;
+            transform: translateY(-3px);
+        }
+        
+        /* Conjugate Button */
+        .conjugate-btn {
+            background-color: #7209b7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-bottom: 25px;
+        }
+        
+        .conjugate-btn:hover {
+            background-color: #9d4edd;
+        }
+        
+        .conjugate-btn.conjugating {
+            background-color: #e63946;
+        }
+        
+        /* Loading Indicator */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 300px;
+            color: #4cc9f0;
+            font-size: 18px;
+        }
+        
+        .loading-spinner {
+            border: 4px solid rgba(76, 201, 240, 0.3);
+            border-top: 4px solid #4cc9f0;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #0f3460;
+            color: #a0a0c0;
+            font-size: 14px;
+        }
+        
+        /* Mode Indicator */
+        .mode-indicator {
+            display: inline-block;
+            padding: 4px 10px;
+            background-color: rgba(67, 97, 238, 0.3);
+            border-radius: 12px;
+            font-size: 12px;
+            margin-top: 5px;
+            color: #a0a0c0;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .concept-display-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .answer-sidebar {
+                width: 100%;
+                border-left: none;
+                border-top: 2px solid rgba(15, 52, 96, 0.7);
+                padding-left: 0;
+                padding-top: 30px;
+                min-height: auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .concept-word {
+                font-size: 36px;
+            }
+            
+            .answer-word {
+                font-size: 28px;
+            }
+            
+            .concept-icon {
+                font-size: 60px;
+            }
+            
+            .action-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .guess-section {
+                grid-column: span 1;
+            }
+            
+            .controls {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon"><i class="fas fa-language"></i></div>
+                <h1>IDIOMATOR</h1>
+            </div>
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="correct-count">0</div>
+                    <div class="stat-label">Correct</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="total-count">0</div>
+                    <div class="stat-label">Total</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="accuracy">0%</div>
+                    <div class="stat-label">Accuracy</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Controls -->
+        <div class="controls">
+            <div class="control-group">
+                <div class="control-label">Language to Learn</div>
+                <select id="target-language">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="ka">Georgian</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <div class="control-label">Reference Language</div>
+                <select id="reference-language">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="ka">Georgian</option>
+                </select>
+            </div>
+            
+            <div class="control-group">
+                <div class="control-label">Interaction Style</div>
+                <select id="interaction-mode">
+                    <option value="target-to-reference">Target → Reference</option>
+                    <option value="reference-to-target">Reference → Target</option>
+                    <option value="random">Random Alternation</option>
+                </select>
+                <div class="mode-indicator" id="mode-indicator">Shown: Target, Answer: Reference</div>
+            </div>
+        </div>
+        
+        <!-- Concept Display with Hidden Answer -->
+        <div class="concept-display-container">
+            <div id="concept-content">
+                <div class="loading" id="loading-indicator">
+                    <div class="loading-spinner"></div>
+                    <div>Loading language data...</div>
+                </div>
+                <div class="concept-main" id="concept-main" style="display: none;">
+                    <div class="concept-icon" id="concept-icon">🚪</div>
+                    <div class="concept-type" id="concept-type">Noun</div>
+                    <div class="concept-word" id="concept-word">room</div>
+                    <div class="concept-phonetic" id="concept-phonetic">/ruːm/</div>
+                    <div class="conjugation-display" id="conjugation-display">
+                        <!-- Conjugation tags will appear here when conjugating -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="answer-sidebar">
+                <div class="answer-label">Answer</div>
+                <div class="answer-hidden" id="answer-hidden">
+                    <i class="fas fa-question-circle"></i> Will appear after your response
+                </div>
+                <div class="answer-word" id="answer-word"></div>
+                <div class="answer-phonetic" id="answer-phonetic"></div>
+                <div class="answer-feedback" id="answer-feedback"></div>
+            </div>
+        </div>
+        
+        <!-- Action Section -->
+        <div class="action-section">
+            <div class="guess-section">
+                <input type="text" class="guess-input" id="guess-input" placeholder="Type your guess here..." disabled>
+                <button class="send-btn" id="send-btn" disabled>Send</button>
+            </div>
+            <button class="action-btn tell-btn" id="tell-btn" disabled>
+                <i class="fas fa-eye"></i> Tell the Answer
+            </button>
+            <button class="action-btn next-btn" id="next-btn" disabled>
+                <i class="fas fa-arrow-right"></i> OK, Next...
+            </button>
+        </div>
+        
+        <!-- Conjugate Button -->
+        <button class="conjugate-btn" id="conjugate-btn" style="display: none;" disabled>Conjugate Verb</button>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <p>IDIOMATOR • Language Learning Tool • Practice words and conjugations</p>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            answerDisplayTime: 1500, // Time in milliseconds to show answer when "Next" is pressed
+            answerCheckTime: 1000    // Time in milliseconds to show feedback after checking answer
+        };
+
+        // Language data will be loaded from external files
+        let languageData = {};
+        let concepts = [];
+
+        // App state
+        let state = {
+            targetLanguage: 'en',
+            referenceLanguage: 'es',
+            interactionMode: 'target-to-reference',
+            currentConceptIndex: 0,
+            correctAnswers: 0,
+            totalAnswers: 0,
+            isConjugating: false,
+            currentVerb: null,
+            currentTense: null,
+            currentPerson: null,
+            conjugationTenses: ['present', 'past'],
+            conjugationPersons: ['1sg', '2sg', '3sg', '1pl', '2pl', '3pl'],
+            answerShown: false,
+            awaitingNext: false,
+            dataLoaded: false
+        };
+
+        // DOM Elements
+        const targetLanguageSelect = document.getElementById('target-language');
+        const referenceLanguageSelect = document.getElementById('reference-language');
+        const interactionModeSelect = document.getElementById('interaction-mode');
+        const modeIndicator = document.getElementById('mode-indicator');
+        const conceptMain = document.getElementById('concept-main');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const conceptIcon = document.getElementById('concept-icon');
+        const conceptType = document.getElementById('concept-type');
+        const conceptWord = document.getElementById('concept-word');
+        const conceptPhonetic = document.getElementById('concept-phonetic');
+        const conjugationDisplay = document.getElementById('conjugation-display');
+        const answerHidden = document.getElementById('answer-hidden');
+        const answerWord = document.getElementById('answer-word');
+        const answerPhonetic = document.getElementById('answer-phonetic');
+        const answerFeedback = document.getElementById('answer-feedback');
+        const conjugateBtn = document.getElementById('conjugate-btn');
+        const guessInput = document.getElementById('guess-input');
+        const sendBtn = document.getElementById('send-btn');
+        const tellBtn = document.getElementById('tell-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const correctCount = document.getElementById('correct-count');
+        const totalCount = document.getElementById('total-count');
+        const accuracy = document.getElementById('accuracy');
+
+        // Initialize the app
+        async function init() {
+            // Set up event listeners
+            targetLanguageSelect.addEventListener('change', handleLanguageChange);
+            referenceLanguageSelect.addEventListener('change', handleLanguageChange);
+            interactionModeSelect.addEventListener('change', handleInteractionModeChange);
+            
+            sendBtn.addEventListener('click', handleSendGuess);
+            guessInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') handleSendGuess();
+            });
+            
+            tellBtn.addEventListener('click', handleTellAnswer);
+            nextBtn.addEventListener('click', handleNext);
+            conjugateBtn.addEventListener('click', toggleConjugation);
+            
+            // Load language data and concepts
+            await loadAllData();
+            
+            // Show loading indicator
+            loadingIndicator.style.display = 'flex';
+            conceptMain.style.display = 'none';
+            
+            // Set initial language selections
+            targetLanguageSelect.value = state.targetLanguage;
+            referenceLanguageSelect.value = state.referenceLanguage;
+            interactionModeSelect.value = state.interactionMode;
+            
+            // Load initial concept
+            if (state.dataLoaded) {
+                loadNewConcept();
+                updateStats();
+                updateModeIndicator();
+            }
+        }
+
+        // Load all data files
+        async function loadAllData() {
+            try {
+                // Load concepts data
+                const conceptsResponse = await fetch('data/concept.json');
+                if (!conceptsResponse.ok) {
+                    throw new Error(`Failed to load concepts: ${conceptsResponse.status}`);
+                }
+                concepts = await conceptsResponse.json();
+                console.log('Concepts loaded:', concepts.length);
+                
+                // Load language data for each language
+                const languages = ['en', 'es', 'ka'];
+                for (const lang of languages) {
+                    try {
+                        const langResponse = await fetch(`languages/${lang}.json`);
+                        if (!langResponse.ok) {
+                            console.warn(`Failed to load ${lang}.json: ${langResponse.status}`);
+                            continue;
+                        }
+                        
+                        // Read the file as text and parse line by line (since it's NDJSON format)
+                        const text = await langResponse.text();
+                        const lines = text.trim().split('\n');
+                        const words = lines.map(line => JSON.parse(line));
+                        
+                        languageData[lang] = words;
+                        console.log(`Language ${lang} loaded:`, words.length, 'words');
+                    } catch (error) {
+                        console.error(`Error loading ${lang}.json:`, error);
+                    }
+                }
+                
+                // Check if we have enough data
+                if (concepts.length === 0) {
+                    throw new Error('No concepts loaded');
+                }
+                
+                const loadedLanguages = Object.keys(languageData);
+                if (loadedLanguages.length === 0) {
+                    throw new Error('No language data loaded');
+                }
+                
+                console.log(`Loaded ${loadedLanguages.length} languages:`, loadedLanguages);
+                state.dataLoaded = true;
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+                loadingIndicator.innerHTML = `
+                    <div style="color: #e63946; text-align: center;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 40px; margin-bottom: 15px;"></i>
+                        <div>Failed to load data</div>
+                        <div style="font-size: 14px; margin-top: 10px;">${error.message}</div>
+                        <div style="font-size: 12px; margin-top: 5px;">Check browser console for details</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Handle language change
+        function handleLanguageChange() {
+            if (!state.dataLoaded) return;
+            
+            state.targetLanguage = targetLanguageSelect.value;
+            state.referenceLanguage = referenceLanguageSelect.value;
+            
+            // Make sure languages are different
+            if (state.targetLanguage === state.referenceLanguage) {
+                // Swap them if they're the same
+                if (state.targetLanguage === 'en') {
+                    state.referenceLanguage = 'es';
+                    referenceLanguageSelect.value = 'es';
+                } else {
+                    state.referenceLanguage = 'en';
+                    referenceLanguageSelect.value = 'en';
+                }
+            }
+            
+            loadNewConcept();
+            updateModeIndicator();
+        }
+
+        // Handle interaction mode change
+        function handleInteractionModeChange() {
+            if (!state.dataLoaded) return;
+            
+            state.interactionMode = interactionModeSelect.value;
+            loadNewConcept();
+            updateModeIndicator();
+        }
+
+        // Update mode indicator text
+        function updateModeIndicator() {
+            let indicatorText = '';
+            
+            switch(state.interactionMode) {
+                case 'target-to-reference':
+                    indicatorText = 'Shown: Target, Answer: Reference';
+                    break;
+                case 'reference-to-target':
+                    indicatorText = 'Shown: Reference, Answer: Target';
+                    break;
+                case 'random':
+                    indicatorText = 'Randomly alternating direction';
+                    break;
+            }
+            
+            modeIndicator.textContent = indicatorText;
+        }
+
+        // Load a new concept
+        function loadNewConcept() {
+            if (!state.dataLoaded) return;
+            
+            // Hide loading indicator and show concept
+            loadingIndicator.style.display = 'none';
+            conceptMain.style.display = 'flex';
+            
+            // Enable all buttons and inputs
+            enableInterface(true);
+            
+            // Reset state
+            state.answerShown = false;
+            state.awaitingNext = false;
+            
+            // Hide answer and show placeholder
+            answerHidden.style.display = 'flex';
+            answerWord.style.display = 'none';
+            answerPhonetic.style.display = 'none';
+            answerFeedback.textContent = '';
+            answerFeedback.className = 'answer-feedback';
+            
+            // Clear conjugation display
+            conjugationDisplay.innerHTML = '';
+            
+            // Get a random concept index
+            state.currentConceptIndex = Math.floor(Math.random() * concepts.length);
+            const concept = concepts[state.currentConceptIndex];
+            
+            // Update concept display
+            conceptIcon.textContent = concept.icon;
+            conceptType.textContent = concept.type;
+            
+            // Get words for current concept
+            const targetWord = getWordForLanguage(state.targetLanguage, state.currentConceptIndex);
+            const referenceWord = getWordForLanguage(state.referenceLanguage, state.currentConceptIndex);
+            
+            // Determine display based on interaction mode
+            let displayWord, displayPhonetic, answerWordText, answerPhoneticText, currentDirection;
+            
+            if (state.interactionMode === 'target-to-reference') {
+                displayWord = targetWord.word;
+                displayPhonetic = targetWord.phonetic;
+                answerWordText = referenceWord.word;
+                answerPhoneticText = referenceWord.phonetic;
+                currentDirection = 'target-to-reference';
+            } else if (state.interactionMode === 'reference-to-target') {
+                displayWord = referenceWord.word;
+                displayPhonetic = referenceWord.phonetic;
+                answerWordText = targetWord.word;
+                answerPhoneticText = targetWord.phonetic;
+                currentDirection = 'reference-to-target';
+            } else {
+                // Random mode
+                if (Math.random() > 0.5) {
+                    displayWord = targetWord.word;
+                    displayPhonetic = targetWord.phonetic;
+                    answerWordText = referenceWord.word;
+                    answerPhoneticText = referenceWord.phonetic;
+                    currentDirection = 'target-to-reference';
+                } else {
+                    displayWord = referenceWord.word;
+                    displayPhonetic = referenceWord.phonetic;
+                    answerWordText = targetWord.word;
+                    answerPhoneticText = targetWord.phonetic;
+                    currentDirection = 'reference-to-target';
+                }
+                
+                // Update mode indicator temporarily for random mode
+                const indicatorText = currentDirection === 'target-to-reference' 
+                    ? 'Current: Target → Reference' 
+                    : 'Current: Reference → Target';
+                modeIndicator.textContent = indicatorText;
+            }
+            
+            // Update display
+            conceptWord.textContent = displayWord;
+            conceptPhonetic.textContent = displayPhonetic;
+            answerWord.textContent = answerWordText;
+            answerPhonetic.textContent = answerPhoneticText;
+            
+            // Clear guess input
+            guessInput.value = '';
+            
+            // Show/hide conjugate button based on word type
+            if (concept.type === 'verb' && targetWord.forms) {
+                conjugateBtn.style.display = 'block';
+                conjugateBtn.textContent = 'Conjugate Verb';
+                conjugateBtn.classList.remove('conjugating');
+                conjugateBtn.disabled = false;
+                state.currentVerb = targetWord;
+            } else {
+                conjugateBtn.style.display = 'none';
+                state.currentVerb = null;
+            }
+            
+            // Store the correct answer for checking
+            state.currentCorrectAnswer = answerWordText;
+            state.currentDirection = currentDirection;
+            
+            // If we're conjugating, set up a new conjugation prompt
+            if (state.isConjugating && state.currentVerb) {
+                setupConjugationPrompt();
+            }
+        }
+
+        // Get word for a specific language and concept index
+        function getWordForLanguage(language, conceptIndex) {
+            if (!languageData[language] || !languageData[language][conceptIndex]) {
+                // Return a fallback word if data is missing
+                return {
+                    word: `[${language.toUpperCase()} word ${conceptIndex}]`,
+                    phonetic: '/?/'
+                };
+            }
+            return languageData[language][conceptIndex];
+        }
+
+        // Enable/disable interface elements
+        function enableInterface(enabled) {
+            guessInput.disabled = !enabled;
+            sendBtn.disabled = !enabled;
+            tellBtn.disabled = !enabled;
+            nextBtn.disabled = !enabled;
+            if (!enabled) {
+                conjugateBtn.disabled = true;
+            }
+        }
+
+        // Show the answer with feedback
+        function showAnswer(isCorrect, message) {
+            state.answerShown = true;
+            answerHidden.style.display = 'none';
+            answerWord.style.display = 'flex';
+            answerPhonetic.style.display = 'block';
+            
+            if (message) {
+                answerFeedback.textContent = message;
+                answerFeedback.className = isCorrect ? 'answer-feedback correct' : 'answer-feedback incorrect';
+            }
+            
+            state.awaitingNext = true;
+        }
+
+        // Handle send guess
+        function handleSendGuess() {
+            if (state.answerShown || state.awaitingNext || !state.dataLoaded) return;
+            
+            const userGuess = guessInput.value.trim().toLowerCase();
+            
+            // Use the correct conjugation if we're conjugating, otherwise use the regular answer
+            const correctAnswer = state.isConjugating && state.currentCorrectConjugation 
+                ? state.currentCorrectConjugation.toLowerCase()
+                : state.currentCorrectAnswer.toLowerCase();
+            
+            state.totalAnswers++;
+            
+            if (userGuess === correctAnswer) {
+                state.correctAnswers++;
+                showAnswer(true, 'Correct!');
+            } else {
+                showAnswer(false, 'Incorrect.');
+            }
+            
+            updateStats();
+        }
+
+        // Handle tell answer
+        function handleTellAnswer() {
+            if (state.answerShown || state.awaitingNext || !state.dataLoaded) return;
+            
+            state.totalAnswers++;
+            showAnswer(false, 'Answer revealed.');
+            updateStats();
+        }
+
+        // Handle next
+        function handleNext() {
+            if (!state.dataLoaded) return;
+            
+            if (!state.answerShown) {
+                // User pressed Next without seeing the answer first
+                // Count as correct and show answer briefly
+                state.correctAnswers++;
+                state.totalAnswers++;
+                showAnswer(true, 'Counted as correct!');
+                updateStats();
+                
+                // Wait before loading next concept or conjugation
+                if (state.isConjugating) {
+                    // If conjugating, wait and then show new conjugation
+                    setTimeout(() => {
+                        if (state.isConjugating && state.currentVerb) {
+                            setupConjugationPrompt();
+                        } else {
+                            loadNewConcept();
+                        }
+                    }, CONFIG.answerDisplayTime);
+                } else {
+                    // If not conjugating, wait and load new concept
+                    setTimeout(loadNewConcept, CONFIG.answerDisplayTime);
+                }
+            } else {
+                // Answer was already shown
+                if (state.isConjugating) {
+                    // If conjugating, show new conjugation
+                    setupConjugationPrompt();
+                } else {
+                    // If not conjugating, go to next concept
+                    loadNewConcept();
+                }
+            }
+        }
+
+        // Update statistics
+        function updateStats() {
+            correctCount.textContent = state.correctAnswers;
+            totalCount.textContent = state.totalAnswers;
+            
+            const accuracyPercent = state.totalAnswers > 0 
+                ? Math.round((state.correctAnswers / state.totalAnswers) * 100) 
+                : 0;
+            accuracy.textContent = `${accuracyPercent}%`;
+        }
+
+        // Toggle conjugation practice
+        function toggleConjugation() {
+            if (!state.dataLoaded) return;
+            
+            if (!state.isConjugating) {
+                // Start conjugation
+                state.isConjugating = true;
+                conjugateBtn.textContent = 'Stop Conjugation';
+                conjugateBtn.classList.add('conjugating');
+                
+                // Setup first conjugation prompt
+                setupConjugationPrompt();
+            } else {
+                // Stop conjugation
+                state.isConjugating = false;
+                conjugateBtn.textContent = 'Conjugate Verb';
+                conjugateBtn.classList.remove('conjugating');
+                
+                // Clear conjugation display
+                conjugationDisplay.innerHTML = '';
+                
+                // Load a new regular concept
+                loadNewConcept();
+            }
+        }
+
+        // Setup conjugation prompt
+        function setupConjugationPrompt() {
+            if (!state.currentVerb || !state.currentVerb.forms) return;
+            
+            // Get random tense and person
+            const tenseIndex = Math.floor(Math.random() * state.conjugationTenses.length);
+            const personIndex = Math.floor(Math.random() * state.conjugationPersons.length);
+            
+            state.currentTense = state.conjugationTenses[tenseIndex];
+            state.currentPerson = state.conjugationPersons[personIndex];
+            
+            // Get correct answer
+            if (state.currentPerson === '*' || !state.currentVerb.forms[state.currentTense][state.currentPerson]) {
+                // Use the generic form if available
+                state.currentCorrectConjugation = state.currentVerb.forms[state.currentTense]['*'] || 
+                    state.currentVerb.word;
+            } else {
+                state.currentCorrectConjugation = state.currentVerb.forms[state.currentTense][state.currentPerson];
+            }
+            
+            // Update answer display for conjugation (but keep hidden)
+            answerWord.textContent = state.currentCorrectConjugation;
+            answerPhonetic.textContent = '';
+            
+            // Update conjugation display with button-like tags
+            conjugationDisplay.innerHTML = '';
+            
+            const tenseDisplay = state.currentTense === 'present' ? 'Present' : 'Past';
+            const personDisplay = getPersonDisplay(state.currentPerson);
+            
+            // Create tense tag
+            const tenseTag = document.createElement('span');
+            tenseTag.className = 'conjugation-tag';
+            tenseTag.textContent = tenseDisplay;
+            conjugationDisplay.appendChild(tenseTag);
+            
+            // Create person tag
+            const personTag = document.createElement('span');
+            personTag.className = 'conjugation-tag';
+            personTag.textContent = personDisplay;
+            conjugationDisplay.appendChild(personTag);
+            
+            // Reset answer shown state
+            state.answerShown = false;
+            state.awaitingNext = false;
+            
+            // Hide answer and show placeholder
+            answerHidden.style.display = 'flex';
+            answerWord.style.display = 'none';
+            answerPhonetic.style.display = 'none';
+            answerFeedback.textContent = '';
+            answerFeedback.className = 'answer-feedback';
+            
+            // Clear guess input
+            guessInput.value = '';
+        }
+
+        // Get display text for person
+        function getPersonDisplay(personCode) {
+            const personMap = {
+                '1sg': '1st singular',
+                '2sg': '2nd singular',
+                '3sg': '3rd singular',
+                '1pl': '1st plural',
+                '2pl': '2nd plural',
+                '3pl': '3rd plural',
+                '*': 'generic'
+            };
+            return personMap[personCode] || personCode;
+        }
+
+        // Initialize the app when page loads
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

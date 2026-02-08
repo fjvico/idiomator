@@ -1,0 +1,53 @@
+# Format: infinitive:english:georgian:yo:tú:él/ella:nosotros:vosotros:ellos/ellas
+# Regular -AR verbs
+hablar:to speak:ლაპარაკი:hablo:hablas:habla:hablamos:habláis:hablan
+amar:to love:სიყვარული:amo:amas:ama:amamos:amáis:aman
+estudiar:to study:სწავლა:estudio:estudias:estudia:estudiamos:estudiáis:estudian
+trabajar:to work:მუშაობა:trabajo:trabajas:trabaja:trabajamos:trabajáis:trabajan
+necesitar:to need:საჭიროება:necesito:necesitas:necesita:necesitamos:necesitáis:necesitan
+comprar:to buy:ყიდვა:compro:compras:compra:compramos:compráis:compran
+mirar:to look:ყურება:miro:miras:mira:miramos:miráis:miran
+escuchar:to listen:მოსმენა:escucho:escuchas:escucha:escuchamos:escucháis:escuchan
+preguntar:to ask:კითხვა:pregunto:preguntas:pregunta:preguntamos:preguntáis:preguntan
+contestar:to answer:პასუხი:contesto:contestas:contesta:contestamos:contestáis:contestan
+llegar:to arrive:ჩამოსვლა:llego:llegas:llega:llegamos:llegáis:llegan
+buscar:to search:ძებნა:busco:buscas:busca:buscamos:buscáis:buscan
+pagar:to pay:გადახდა:pago:pagas:paga:pagamos:pagáis:pagan
+llevar:to wear:ტარება:llevo:llevas:lleva:llevamos:lleváis:llevan
+dejar:to leave:დატოვება:dejo:dejas:deja:dejamos:dejáis:dejan
+tomar:to take:აღება:tomo:tomas:toma:tomamos:tomáis:toman
+visitar:to visit:ვიზიტი:visito:visitas:visita:visitamos:visitáis:visitan
+caminar:to walk:სვლა:camino:caminas:camina:caminamos:camináis:caminan
+cantar:to sing:სიმღერა:canto:cantas:canta:cantamos:cantáis:cantan
+bailar:to dance:ცეკვა:bailo:bailas:baila:bailamos:bailáis:bailan
+
+# Regular -ER verbs
+comer:to eat:ჭამა:como:comes:come:comemos:coméis:comen
+beber:to drink:სმა:bebo:bebes:bebe:bebemos:bebéis:beben
+aprender:to learn:სწავლა:aprendo:aprendes:aprende:aprendemos:aprendéis:aprenden
+comprender:to understand:გაგება:comprendo:comprendes:comprende:comprendemos:comprendéis:comprenden
+correr:to run:სირბილი:corro:corres:corre:corremos:corréis:corren
+vender:to sell:გაყიდვა:vendo:vendes:vende:vendemos:vendéis:venden
+leer:to read:კითხვა:leo:lees:lee:leemos:leéis:leen
+creer:to believe:რწმენა:creo:crees:cree:creemos:creéis:creen
+poseer:to possess:ფლობა:poseo:posees:posee:poseemos:poseéis:poseen
+meter:to put:ჩადება:meto:metes:mete:metemos:metéis:meten
+temer:to fear:შიში:temo:temes:teme:tememos:teméis:temen
+prometer:to promise:პირობა:prometo:prometes:promete:prometemos:prometéis:prometen
+responder:to answer:პასუხი:respondo:respondes:responde:respondemos:respondéis:responden
+
+# Regular -IR verbs
+vivir:to live:ცხოვრება:vivo:vives:vivimos:vivís:viven
+abrir:to open:გაღება:abro:abres:abre:abrimos:abrís:abren
+escribir:to write:დაწერა:escribo:escribes:escribe:escribimos:escribís:escriben
+recibir:to receive:მიღება:recibo:recibes:recibe:recibimos:recibís:reciben
+decidir:to decide:გადაწყვეტა:decido:decides:decide:decidimos:decidís:deciden
+permitir:to allow:ნებართვა:permito:permites:permite:permitimos:permitís:permiten
+cubrir:to cover:დაფარვა:cubro:cubres:cubre:cubrimos:cubrís:cubren
+sufrir:to suffer:ტანჯვა:sufro:sufres:sufre:sufrimos:sufrís:sufren
+describir:to describe:აღწერა:describo:describes:describe:describimos:describís:describen
+descubrir:to discover:აღმოჩენა:descubro:descubres:descubre:descubrimos:descubrís:descubren
+unir:to unite:გაერთიანება:uno:unes:une:unimos:unís:unen
+asistir:to attend:დასწრება:asisto:asistes:asiste:asistimos:asistís:asisten
+subir:to go up:ასვლა:subo:subes:sube:subimos:subís:suben
+partir:to depart:გამგზავრება:parto:partes:parte:partimos:partís:parten
