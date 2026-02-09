@@ -691,7 +691,7 @@ function setupConjugationPrompt() {
 }
 
 function getPersonDisplay(p) {
-    const map = {'1sg': '1st sing.', '2sg': '2nd sing.', '3sg': '3rd sing.', '1pl': '1st plur.', '2pl': '2nd plur.', '3pl': '3rd plur.'};
+    const map = {'1sg': '1st sing. (I)', '2sg': '2nd sing. (YOU)', '3sg': '3rd sing. (HE/SHE/IT)', '1pl': '1st plur. (WE)', '2pl': '2nd plur. (YOU)', '3pl': '3rd plur. (THEY)'};
     return map[p] || p;
 }
 
