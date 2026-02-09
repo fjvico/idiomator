@@ -8,19 +8,113 @@ const CONFIG = {
 const LANGUAGE_NAMES = {
     'en': 'English',
     'es': 'Spanish',
-    'ka': 'Georgian',
     'fr': 'French',
     'de': 'German',
-    'it': 'Italian'
+    'it': 'Italian',
+    'pt': 'Portuguese',
+    'ru': 'Russian',
+    'zh': 'Chinese',
+    'ja': 'Japanese',
+    'ko': 'Korean',
+    'ar': 'Arabic',
+    'hi': 'Hindi',
+    'bn': 'Bengali',
+    'tr': 'Turkish',
+    'nl': 'Dutch',
+    'pl': 'Polish',
+    'sv': 'Swedish',
+    'da': 'Danish',
+    'no': 'Norwegian',
+    'fi': 'Finnish',
+    'el': 'Greek',
+    'he': 'Hebrew',
+    'th': 'Thai',
+    'vi': 'Vietnamese',
+    'id': 'Indonesian',
+    'ms': 'Malay',
+    'sw': 'Swahili',
+    'fa': 'Persian',
+    'uk': 'Ukrainian',
+    'cs': 'Czech',
+    'ro': 'Romanian',
+    'hu': 'Hungarian',
+    'sk': 'Slovak',
+    'bg': 'Bulgarian',
+    'hr': 'Croatian',
+    'sr': 'Serbian',
+    'sl': 'Slovenian',
+    'lt': 'Lithuanian',
+    'lv': 'Latvian',
+    'et': 'Estonian',
+    'ga': 'Irish',
+    'cy': 'Welsh',
+    'eu': 'Basque',
+    'ca': 'Catalan',
+    'gl': 'Galician',
+    'af': 'Afrikaans',
+    'zu': 'Zulu',
+    'xh': 'Xhosa',
+    'st': 'Southern Sotho',
+    'tn': 'Tswana',
+    'ss': 'Swati',
+    've': 'Venda',
+    'ts': 'Tsonga',
+    'ta': 'Tamil',
+    'te': 'Telugu',
+    'kn': 'Kannada',
+    'ml': 'Malayalam',
+    'mr': 'Marathi',
+    'gu': 'Gujarati',
+    'pa': 'Punjabi',
+    'or': 'Odia',
+    'as': 'Assamese',
+    'ne': 'Nepali',
+    'si': 'Sinhala',
+    'my': 'Burmese',
+    'km': 'Khmer',
+    'lo': 'Lao',
+    'ka': 'Georgian',
+    'hy': 'Armenian',
+    'az': 'Azerbaijani',
+    'kk': 'Kazakh',
+    'uz': 'Uzbek',
+    'ky': 'Kyrgyz',
+    'tg': 'Tajik',
+    'tk': 'Turkmen',
+    'mn': 'Mongolian',
+    'ps': 'Pashto',
+    'ku': 'Kurdish',
+    'sd': 'Sindhi',
+    'ur': 'Urdu',
+    'am': 'Amharic',
+    'ti': 'Tigrinya',
+    'om': 'Oromo',
+    'so': 'Somali',
+    'ha': 'Hausa',
+    'yo': 'Yoruba',
+    'ig': 'Igbo',
+    'ff': 'Fulah',
+    'rw': 'Kinyarwanda',
+    'sn': 'Shona',
+    'ny': 'Chichewa',
+    'mg': 'Malagasy',
+    'mt': 'Maltese',
+    'is': 'Icelandic',
+    'fy': 'Western Frisian',
+    'gd': 'Scottish Gaelic',
+    'br': 'Breton',
+    'co': 'Corsican',
+    'lb': 'Luxembourgish',
+    'li': 'Limburgish',
+    'oc': 'Occitan',
+    'sc': 'Sardinian',
+    'sq': 'Albanian',
+    'bs': 'Bosnian',
+    'mk': 'Macedonian'
 };
 
-// Language data
-let languageData = {
-    en: [],
-    es: [],
-    ka: []
-};
-
+// Dynamic language data - will be populated from files
+let languageData = {};
 let concepts = [];
 
 // App state
@@ -82,42 +176,6 @@ const fallbackConcepts = [
     { type: 'noun', icon: '🚽' }
 ];
 
-const fallbackLanguageData = {
-    en: [
-        { word: 'room', phonetic: '/ruːm/' },
-        { word: 'house', phonetic: '/haʊs/' },
-        { word: 'home', phonetic: '/hoʊm/' },
-        { word: 'apartment', phonetic: '/əˈpɑːrt.mənt/' },
-        { word: 'kitchen', phonetic: '/ˈkɪtʃ.ɪn/' },
-        { word: 'living room', phonetic: '/ˈlɪv.ɪŋ ˌruːm/' },
-        { word: 'bedroom', phonetic: '/ˈbed.ruːm/' },
-        { word: 'bathroom', phonetic: '/ˈbæθ.ruːm/' },
-        { word: 'toilet', phonetic: '/ˈtɔɪ.lət/' }
-    ],
-    es: [
-        { word: 'habitación', phonetic: '/a.βi.taˈθjon/' },
-        { word: 'casa', phonetic: '/ˈka.sa/' },
-        { word: 'hogar', phonetic: '/oˈɡaɾ/' },
-        { word: 'apartamento', phonetic: '/a.paɾ.taˈmen.to/' },
-        { word: 'cocina', phonetic: '/koˈθi.na/' },
-        { word: 'sala de estar', phonetic: '/ˈsa.la ðe esˈtaɾ/' },
-        { word: 'dormitorio', phonetic: '/doɾ.miˈto.ɾjo/' },
-        { word: 'baño', phonetic: '/ˈba.ɲo/' },
-        { word: 'inodoro', phonetic: '/i.noˈðo.ɾo/' }
-    ],
-    ka: [
-        { word: 'ოთახი', phonetic: '/otʰaxi/' },
-        { word: 'სახლი', phonetic: '/saxli/' },
-        { word: 'მთავარი', phonetic: '/mtʰavari/' },
-        { word: 'ბინა', phonetic: '/bina/' },
-        { word: 'სამზარეულო', phonetic: '/samzareulo/' },
-        { word: 'მისაღები ოთახი', phonetic: '/misaɣebi otʰaxi/' },
-        { word: 'საძინებელი', phonetic: '/sadzinebeli/' },
-        { word: 'აბაზანა', phonetic: '/abazana/' },
-        { word: 'ტუალეტი', phonetic: '/tʼualetʼi/' }
-    ]
-};
-
 // Initialize the app
 async function init() {
     console.log('Initializing app...');
@@ -156,8 +214,14 @@ async function init() {
     populateLanguageDropdowns();
     
     // Set initial language selections after dropdowns are built
-    targetLanguageSelect.value = state.targetLanguage;
-    referenceLanguageSelect.value = state.referenceLanguage;
+    if (Object.keys(languageData).length >= 2) {
+        const languages = Object.keys(languageData);
+        state.targetLanguage = languages[0];
+        state.referenceLanguage = languages[1] || languages[0];
+        targetLanguageSelect.value = state.targetLanguage;
+        referenceLanguageSelect.value = state.referenceLanguage;
+    }
+    
     interactionModeSelect.value = state.interactionMode;
     
     // Load initial concept
@@ -220,43 +284,113 @@ async function loadAllData() {
         throw error; 
     }
     
-    // Load language data for each language
-    const languages = ['en', 'es', 'ka'];
-    const loadPromises = languages.map(async (lang) => {
+    // First, detect which language files exist
+    const possibleLanguages = Object.keys(LANGUAGE_NAMES);
+    const loadPromises = possibleLanguages.map(async (lang) => {
         try {
-            console.log(`Fetching ${lang}.json...`);
-            const response = await fetchWithTimeout(`languages/${lang}.json`, 3000);
+            console.log(`Checking for ${lang}.json...`);
+            const response = await fetchWithTimeout(`languages/${lang}.json`, 2000);
             
-            if (!response.ok) return false;
+            if (!response.ok) {
+                console.log(`${lang}.json not found`);
+                return null;
+            }
             
             const words = await response.json();
             
             if (Array.isArray(words) && words.length > 0) {
-                languageData[lang] = words;
-                return true;
+                console.log(`Loaded ${words.length} words for ${lang}`);
+                return { lang, words };
             }
-            return false;
+            return null;
             
         } catch (error) {
-            console.log(`Error loading ${lang}.json:`, error);
-            return false;
+            console.log(`Error loading ${lang}.json:`, error.message);
+            return null;
         }
     });
     
-    await Promise.all(loadPromises);
+    const loadedLanguages = await Promise.all(loadPromises);
     
-    // Ensure padding
+    // Filter out null results and populate languageData
+    loadedLanguages.forEach(result => {
+        if (result) {
+            languageData[result.lang] = result.words;
+        }
+    });
+    
+    console.log(`Loaded ${Object.keys(languageData).length} languages:`, Object.keys(languageData));
+    
+    if (Object.keys(languageData).length === 0) {
+        throw new Error('No language files found');
+    }
+    
+    // Ensure padding for all loaded languages
     const targetLength = concepts.length;
-    languages.forEach(lang => {
-        if (languageData[lang] && languageData[lang].length < targetLength) {
+    Object.keys(languageData).forEach(lang => {
+        if (languageData[lang].length < targetLength) {
+            console.log(`Padding ${lang} from ${languageData[lang].length} to ${targetLength} entries`);
+            const fallbackWords = getFallbackWordsForLanguage(lang);
             while (languageData[lang].length < targetLength) {
-                const fallbackIndex = languageData[lang].length % fallbackLanguageData[lang].length;
-                languageData[lang].push(fallbackLanguageData[lang][fallbackIndex]);
+                const fallbackIndex = languageData[lang].length % fallbackWords.length;
+                languageData[lang].push(fallbackWords[fallbackIndex]);
             }
         }
     });
     
     state.dataLoaded = true;
+}
+
+// Helper function to get fallback words for a language
+function getFallbackWordsForLanguage(lang) {
+    const fallbackWords = {
+        'en': [
+            { word: 'room', phonetic: '/ruːm/' },
+            { word: 'house', phonetic: '/haʊs/' },
+            { word: 'home', phonetic: '/hoʊm/' },
+            { word: 'apartment', phonetic: '/əˈpɑːrt.mənt/' },
+            { word: 'kitchen', phonetic: '/ˈkɪtʃ.ɪn/' },
+            { word: 'living room', phonetic: '/ˈlɪv.ɪŋ ˌruːm/' },
+            { word: 'bedroom', phonetic: '/ˈbed.ruːm/' },
+            { word: 'bathroom', phonetic: '/ˈbæθ.ruːm/' },
+            { word: 'toilet', phonetic: '/ˈtɔɪ.lət/' }
+        ],
+        'es': [
+            { word: 'habitación', phonetic: '/a.βi.taˈθjon/' },
+            { word: 'casa', phonetic: '/ˈka.sa/' },
+            { word: 'hogar', phonetic: '/oˈɡaɾ/' },
+            { word: 'apartamento', phonetic: '/a.paɾ.taˈmen.to/' },
+            { word: 'cocina', phonetic: '/koˈθi.na/' },
+            { word: 'sala de estar', phonetic: '/ˈsa.la ðe esˈtaɾ/' },
+            { word: 'dormitorio', phonetic: '/doɾ.miˈto.ɾjo/' },
+            { word: 'baño', phonetic: '/ˈba.ɲo/' },
+            { word: 'inodoro', phonetic: '/i.noˈðo.ɾo/' }
+        ],
+        'fr': [
+            { word: 'chambre', phonetic: '/ʃɑ̃bʁ/' },
+            { word: 'maison', phonetic: '/mɛ.zɔ̃/' },
+            { word: 'maison', phonetic: '/mɛ.zɔ̃/' },
+            { word: 'appartement', phonetic: '/a.paʁ.tə.mɑ̃/' },
+            { word: 'cuisine', phonetic: '/kɥi.zin/' },
+            { word: 'salon', phonetic: '/sa.lɔ̃/' },
+            { word: 'chambre', phonetic: '/ʃɑ̃bʁ/' },
+            { word: 'salle de bain', phonetic: '/sal də bɛ̃/' },
+            { word: 'toilettes', phonetic: '/twa.lɛt/' }
+        ],
+        'de': [
+            { word: 'Zimmer', phonetic: '/ˈtsɪmɐ/' },
+            { word: 'Haus', phonetic: '/haʊ̯s/' },
+            { word: 'Zuhause', phonetic: '/tsuˈhaʊ̯zə/' },
+            { word: 'Wohnung', phonetic: '/ˈvoːnʊŋ/' },
+            { word: 'Küche', phonetic: '/ˈkʏçə/' },
+            { word: 'Wohnzimmer', phonetic: '/ˈvoːnˌtsɪmɐ/' },
+            { word: 'Schlafzimmer', phonetic: '/ˈʃlaːfˌtsɪmɐ/' },
+            { word: 'Badezimmer', phonetic: '/ˈbaːdəˌtsɪmɐ/' },
+            { word: 'Toilette', phonetic: '/to̯aˈlɛtə/' }
+        ]
+    };
+    
+    return fallbackWords[lang] || fallbackWords['en'];
 }
 
 // Helper function for fetch with timeout
@@ -273,9 +407,10 @@ function fetchWithTimeout(url, timeout = 5000) {
 function useFallbackData() {
     concepts = [...fallbackConcepts];
     languageData = {
-        en: [...fallbackLanguageData.en],
-        es: [...fallbackLanguageData.es],
-        ka: [...fallbackLanguageData.ka]
+        'en': getFallbackWordsForLanguage('en'),
+        'es': getFallbackWordsForLanguage('es'),
+        'fr': getFallbackWordsForLanguage('fr'),
+        'de': getFallbackWordsForLanguage('de')
     };
     state.dataLoaded = true;
     state.usingFallbackData = true;
@@ -343,6 +478,7 @@ function loadNewConcept() {
     
     state.answerShown = false;
     state.awaitingNext = false;
+    state.isConjugating = false;
     
     answerHidden.style.display = 'flex';
     answerWord.style.display = 'none';
@@ -396,7 +532,15 @@ function loadNewConcept() {
 
 // Get word helper
 function getWordForLanguage(language, conceptIndex) {
-    const data = languageData[language] || fallbackLanguageData[language];
+    const data = languageData[language];
+    if (!data || data.length === 0) {
+        return {
+            word: '?',
+            phonetic: '',
+            forms: null
+        };
+    }
+    
     const index = conceptIndex % data.length;
     const word = data[index];
     
@@ -413,7 +557,9 @@ function enableInterface(enabled) {
     sendBtn.disabled = !enabled;
     tellBtn.disabled = !enabled;
     nextBtn.disabled = !enabled;
-    if (!enabled) conjugateBtn.disabled = true;
+    if (!enabled && conjugateBtn.style.display === 'block') {
+        conjugateBtn.disabled = true;
+    }
 }
 
 // Show the answer
@@ -434,10 +580,10 @@ function showAnswer(isCorrect, message) {
 function handleSendGuess() {
     if (state.answerShown || state.awaitingNext) return;
     const userGuess = guessInput.value.trim().toLowerCase();
-    const correct = state.isConjugating ? state.currentCorrectConjugation : state.currentCorrectAnswer;
+    const correct = state.isConjugating ? state.currentCorrectConjugation.toLowerCase() : state.currentCorrectAnswer.toLowerCase();
     
     state.totalAnswers++;
-    if (userGuess === correct.toLowerCase()) {
+    if (userGuess === correct) {
         state.correctAnswers++;
         showAnswer(true, 'Correct!');
     } else {
@@ -455,14 +601,24 @@ function handleTellAnswer() {
 
 function handleNext() {
     if (!state.dataLoaded) return;
+    
     if (!state.answerShown) {
         state.correctAnswers++;
         state.totalAnswers++;
         showAnswer(true, 'Counted as correct!');
         updateStats();
-        setTimeout(() => state.isConjugating ? setupConjugationPrompt() : loadNewConcept(), CONFIG.answerDisplayTime);
+        
+        if (state.isConjugating) {
+            setTimeout(() => setupConjugationPrompt(), CONFIG.answerDisplayTime);
+        } else {
+            setTimeout(() => loadNewConcept(), CONFIG.answerDisplayTime);
+        }
     } else {
-        state.isConjugating ? setupConjugationPrompt() : loadNewConcept();
+        if (state.isConjugating) {
+            setupConjugationPrompt();
+        } else {
+            loadNewConcept();
+        }
     }
 }
 
@@ -478,6 +634,11 @@ function toggleConjugation() {
     if (state.isConjugating) {
         conjugateBtn.textContent = 'Stop Conjugation';
         conjugateBtn.classList.add('conjugating');
+        // Clear the current concept display and set up conjugation
+        conceptWord.textContent = '';
+        conceptPhonetic.textContent = '';
+        conceptIcon.innerHTML = '🔤';
+        conceptType.textContent = 'Verb Conjugation';
         setupConjugationPrompt();
     } else {
         conjugateBtn.textContent = 'Conjugate Verb';
@@ -489,19 +650,44 @@ function toggleConjugation() {
 
 function setupConjugationPrompt() {
     if (!state.currentVerb?.forms) return;
+    
+    loadingIndicator.style.display = 'none';
+    conceptMain.style.display = 'flex';
+    enableInterface(true);
+    
     state.currentTense = state.conjugationTenses[Math.floor(Math.random() * state.conjugationTenses.length)];
     state.currentPerson = state.conjugationPersons[Math.floor(Math.random() * state.conjugationPersons.length)];
     state.currentCorrectConjugation = state.currentVerb.forms[state.currentTense][state.currentPerson] || state.currentVerb.forms[state.currentTense]['*'];
     
     answerWord.textContent = state.currentCorrectConjugation;
-    conjugationDisplay.innerHTML = `<span class="conjugation-tag">${state.currentTense}</span><span class="conjugation-tag">${getPersonDisplay(state.currentPerson)}</span>`;
+    answerPhonetic.textContent = state.currentVerb.phonetic || '';
+    
+    // Clear and set up the conjugation display
+    conjugationDisplay.innerHTML = '';
+    
+    const tenseTag = document.createElement('span');
+    tenseTag.className = 'conjugation-tag';
+    tenseTag.textContent = state.currentTense;
+    
+    const personTag = document.createElement('span');
+    personTag.className = 'conjugation-tag';
+    personTag.textContent = getPersonDisplay(state.currentPerson);
+    
+    conjugationDisplay.appendChild(tenseTag);
+    conjugationDisplay.appendChild(personTag);
+    
+    // Display the infinitive verb for context
+    conceptWord.textContent = state.currentVerb.word + ' →';
+    conceptPhonetic.textContent = state.currentVerb.phonetic || '';
     
     state.answerShown = false;
     state.awaitingNext = false;
     answerHidden.style.display = 'flex';
     answerWord.style.display = 'none';
+    answerPhonetic.style.display = 'none';
     answerFeedback.textContent = '';
     guessInput.value = '';
+    guessInput.focus();
 }
 
 function getPersonDisplay(p) {
