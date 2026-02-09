@@ -208,7 +208,7 @@
   {"word": "give", "phonetic": "/ɡɪv/", "forms": {"present": {"1sg": "give", "2sg": "give", "3sg": "gives", "1pl": "give", "2pl": "give", "3pl": "give"}}},
   {"word": "see", "phonetic": "/siː/", "forms": {"present": {"1sg": "see", "2sg": "see", "3sg": "sees", "1pl": "see", "2pl": "see", "3pl": "see"}}},
   {"word": "know", "phonetic": "/noʊ/", "forms": {"present": {"1sg": "know", "2sg": "know", "3sg": "knows", "1pl": "know", "2pl": "know", "3pl": "know"}}},
-  {"word": "leave/go out", "phonetic": "/liːv/ & /ɡoʊ aʊt/", "forms": {"present": {"1sg": "leave", "2sg": "leave", "3sg": "leaves", "1pl": "leave", "2pl": "leave", "3pl": "leave"}}},
+  {"word": "leave", "phonetic": "/liːv/ & /ɡoʊ aʊt/", "forms": {"present": {"1sg": "leave", "2sg": "leave", "3sg": "leaves", "1pl": "leave", "2pl": "leave", "3pl": "leave"}}},
   {"word": "come", "phonetic": "/kʌm/", "forms": {"present": {"1sg": "come", "2sg": "come", "3sg": "comes", "1pl": "come", "2pl": "come", "3pl": "come"}}},
   {"word": "think", "phonetic": "/θɪŋk/", "forms": {"present": {"1sg": "think", "2sg": "think", "3sg": "thinks", "1pl": "think", "2pl": "think", "3pl": "think"}}},
   {"word": "feel/regret", "phonetic": "/fiːl/ & /rɪˈɡret/", "forms": {"present": {"1sg": "feel", "2sg": "feel", "3sg": "feels", "1pl": "feel", "2pl": "feel", "3pl": "feel"}}},
