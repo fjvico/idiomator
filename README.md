@@ -221,7 +221,3 @@ MIT License - See LICENSE file for details. You are free to use, modify, and dis
 - **GitHub Issues**: Report bugs or request features
 - **Documentation**: Check this README and code comments
 - **Community**: Share experiences and tips with other users
-
-## TBD
-- Languages in the drop-down menu must be identified from the files in `languages/`.
-- Test TWEMOJI instead of Unicode symbols
