@@ -222,6 +222,6 @@ MIT License - See LICENSE file for details. You are free to use, modify, and dis
 - **Documentation**: Check this README and code comments
 - **Community**: Share experiences and tips with other users
 
----
-
-**IDIOMATOR**: Making language learning intuitive for users and customizable for developers. Whether you're mastering a new language or building language tools, IDIOMATOR provides the foundation for effective language practice.
+## TBD
+- Languages in the drop-down menu must be identified from the files in `languages/`.
+- Test TWEMOJI instead of Unicode symbols
